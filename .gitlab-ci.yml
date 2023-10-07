@@ -26,4 +26,5 @@ test:
     paths:
       - target/scala-2.13/scoverage-data
       - target/scala-2.13/scoverage-report
+  coverage: '/Coverage was \[\d+.\d+\%\]/'
 
