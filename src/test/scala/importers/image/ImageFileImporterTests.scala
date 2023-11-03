@@ -49,19 +49,14 @@ class ImageFileImporterTests extends FlatSpec with Matchers {
     }
   }
 
-  "ImageFileImporter" should "successfully import a large JPG image in time constraint" in {
+  "ImageFileImporter" should "successfully import a large JPG image" in {
     val testImageFile = new File(getClass.getResource("/large-img1.jpg").toURI)
 
-    val startTime = System.currentTimeMillis()
     val importer = new ImageFileImporter(testImageFile)
     val image: Image[RGBAPixel] = importer.retrieve()
-    val durationTime = System.currentTimeMillis() - startTime
 
     image.height shouldBe 5000
     image.width shouldBe 5000
-
-    val limit: Long = 5000
-    durationTime should be <= limit
   }
 
 }

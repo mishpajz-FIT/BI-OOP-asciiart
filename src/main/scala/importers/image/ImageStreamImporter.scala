@@ -2,12 +2,12 @@ package importers.image
 
 import models.image.Image
 import models.pixel.RGBAPixel
-import storages.VectorBuffer
 
 import java.awt.Color
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import javax.imageio.stream.ImageInputStream
+import scala.collection.immutable.ArraySeq
 
 class ImageStreamImporter(inputStream: ImageInputStream) extends ImageImporter {
 
@@ -19,12 +19,18 @@ class ImageStreamImporter(inputStream: ImageInputStream) extends ImageImporter {
     val width = bufferedImage.getWidth()
     val height = bufferedImage.getHeight()
 
-    val pixels = Vector.tabulate(width, height) { (x, y) =>
-      val color = new Color(bufferedImage.getRGB(x, y), true)
-      RGBAPixel(color.getRed, color.getGreen, color.getBlue, color.getAlpha)
+    val pixelsBuilder = Vector.newBuilder[Vector[RGBAPixel]]
+
+    for (y <- 0 until height) {
+      val rowBuilder = Vector.newBuilder[RGBAPixel]
+      for (x <- 0 until width) {
+        val color = new Color(bufferedImage.getRGB(x, y), true)
+        rowBuilder += RGBAPixel(color.getRed, color.getGreen, color.getBlue, color.getAlpha)
+      }
+      pixelsBuilder += rowBuilder.result()
     }
 
-    new Image(new VectorBuffer(width, height, pixels))
+    new Image(width, height, pixelsBuilder.result())
   }
 
   override def retrieve(): Image[RGBAPixel] = readFromStream()
