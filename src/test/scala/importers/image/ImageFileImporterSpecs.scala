@@ -13,7 +13,22 @@ class ImageFileImporterSpecs extends FlatSpec with Matchers {
 
   val isCI: Boolean = sys.env.getOrElse("CI", "false").toBoolean
 
-  //TODO: add test for small JPEG
+  it should "return Image[RGBAPixel] when provided with JPEG image" in {
+    val testImageUri = getClass.getResource("/small-img3.jpeg").toURI
+
+    val importer = ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString).getOrElse(fail("Image importer was not created"))
+
+    val image = importer.retrieve() match {
+      case Some(value: Image[RGBAPixel]) => value
+      case Some(_) => fail("Image has incorrect pixel format")
+      case None => fail("Image was not imported")
+    }
+
+    image.height shouldBe 1
+    image.width shouldBe 1
+
+    image.getPixel(0, 0) shouldEqual RGBAPixel(255, 0, 0, 255)
+  }
 
   it should "return Image[RGBAPixel] when provided with PNG image" in {
     val testImageUri = getClass.getResource("/small-img1.png").toURI
