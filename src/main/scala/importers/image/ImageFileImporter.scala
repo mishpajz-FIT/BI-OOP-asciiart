@@ -1,7 +1,5 @@
 package importers.image
 
-import importers.ImporterException
-
 import java.io.File
 import javax.imageio.ImageIO.{createImageInputStream, getImageReaders}
 import javax.imageio.stream.FileImageInputStream
@@ -18,25 +16,23 @@ object ImageFileImporter {
     Try {
       val file = new File(filePath)
 
-      if (!file.exists() || !file.isFile)
-        throw ImporterException(
+      if (file.exists() && file.isFile)
+        throw new IllegalArgumentException(
           s"File at path $filePath is not usable file or doesn't exist")
 
-      val fileType = getFileType(file) match {
-        case Some(value) => value
-        case None =>
-          throw ImporterException(
-            s"File at path $filePath could not be opened or processed")
-      }
+      val fileType = getFileType(file).getOrElse(
+        throw new IllegalArgumentException(
+          s"File at path $filePath could not be opened or processed")
+      )
 
       if (!allowedFileTypes.contains(fileType))
-        throw ImporterException(
+        throw new IllegalArgumentException(
           s"File at path $filePath has unsupported file type $fileType")
 
       try new ImageFileImporter(file)
       catch {
         case NonFatal(e) =>
-          throw ImporterException(
+          throw new IllegalArgumentException(
             s"File at path $filePath could not be processed due to error ${e.getMessage}")
       }
     }

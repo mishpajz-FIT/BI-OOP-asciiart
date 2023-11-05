@@ -1,6 +1,5 @@
 package importers.image
 
-import importers.ImporterException
 import models.image.Image
 import models.pixel.RGBAPixel
 import org.mockito.ArgumentMatchers.anyInt
@@ -103,51 +102,51 @@ class ImageFileImporterSpecs extends FlatSpec with Matchers {
     image.width shouldBe 5000
   }
 
-  it should "fail with ImporterException if when unsupported image format (BMP) is provided" in {
+  it should "fail with IllegalArgumentException if when unsupported image format (BMP) is provided" in {
     val testImageUri = getClass.getResource("/unsupported_format.bmp").toURI
 
     val result =
       ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString)
 
-    result.failure.exception shouldBe an[ImporterException]
+    result.failure.exception shouldBe an[IllegalArgumentException]
     result.failure.exception.getMessage should include(
       "has unsupported file type bmp")
   }
 
-  it should "fail with ImporterException if the file is directory" in {
+  it should "fail with IllegalArgumentException if the file is directory" in {
     val testImageUri = getClass.getResource("/directory1").toURI
 
     val result =
       ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString)
 
-    result.failure.exception shouldBe an[ImporterException]
+    result.failure.exception shouldBe an[IllegalArgumentException]
     result.failure.exception.getMessage should include(
       "is not usable file or doesn't exist")
   }
 
-  it should "fail with ImporterException if the file does not exist" in {
+  it should "fail with IllegalArgumentException if the file does not exist" in {
     val result = ImageFileImporter("/nonexistent")
 
-    result.failure.exception shouldBe an[ImporterException]
+    result.failure.exception shouldBe an[IllegalArgumentException]
     result.failure.exception.getMessage should include(
       "is not usable file or doesn't exist")
   }
 
-  it should "fail with ImporterException if the file cannot be processed" in {
+  it should "fail with IllegalArgumentException if the file cannot be processed" in {
     val testImageUri = getClass.getResource("/text.txt").toURI
 
     val result =
       ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString)
 
-    result.failure.exception shouldBe an[ImporterException]
+    result.failure.exception shouldBe an[IllegalArgumentException]
     result.failure.exception.getMessage should include(
       "could not be opened or processed")
   }
 
-  it should "fail with ImporterException if filepath is empty" in {
+  it should "fail with IllegalArgumentException if filepath is empty" in {
     val result = ImageFileImporter("")
 
-    result.failure.exception shouldBe an[ImporterException]
+    result.failure.exception shouldBe an[IllegalArgumentException]
     result.failure.exception.getMessage should include(
       "is not usable file or doesn't exist")
   }
