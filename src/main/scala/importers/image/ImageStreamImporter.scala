@@ -10,7 +10,7 @@ import scala.collection.immutable.ArraySeq
 import scala.util.Try
 
 class ImageStreamImporter(inputStream: ImageInputStream)
-    extends ImageImporter
+    extends ImageImporter[RGBAPixel]
     with ImageIOReadWrapper {
 
   private def readFromStream(): Option[Image[RGBAPixel]] =
