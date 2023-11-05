@@ -3,9 +3,11 @@ package importers.image
 import models.image.Image
 import models.pixel.RGBAPixel
 import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.MockitoSugar.{mock, when}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{FlatSpec, Matchers}
 
+import java.io.{File, FileOutputStream}
 import java.nio.file.Paths
 
 class ImageFileImporterSpecs extends FlatSpec with Matchers {
@@ -151,4 +153,14 @@ class ImageFileImporterSpecs extends FlatSpec with Matchers {
       "is not usable file or doesn't exist")
   }
 
+  it should "fail with IllegalArgumentException if the image is empty" in {
+    val emptyImage = File.createTempFile("empty_img", "")
+    emptyImage.deleteOnExit()
+
+    val result = ImageFileImporter(emptyImage.getAbsolutePath)
+
+    result.failure.exception shouldBe an[IllegalArgumentException]
+    result.failure.exception.getMessage should include(
+      "could not be opened or processed")
+  }
 }

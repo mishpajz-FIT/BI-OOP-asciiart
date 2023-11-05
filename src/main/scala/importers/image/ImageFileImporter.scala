@@ -1,7 +1,7 @@
 package importers.image
 
 import java.io.File
-import javax.imageio.ImageIO.{createImageInputStream, getImageReaders}
+import javax.imageio.ImageIO
 import javax.imageio.stream.FileImageInputStream
 import scala.util.{Failure, Success, Try, Using}
 import scala.util.control.NonFatal
@@ -16,7 +16,7 @@ object ImageFileImporter {
     Try {
       val file = new File(filePath)
 
-      if (file.exists() && file.isFile)
+      if (!file.exists() || !file.isFile)
         throw new IllegalArgumentException(
           s"File at path $filePath is not usable file or doesn't exist")
 
@@ -40,8 +40,8 @@ object ImageFileImporter {
   private def getFileType(file: File): Option[String] = {
     // https://stackoverflow.com/questions/11447035/java-get-image-extension-type-using-bufferedimage-from-url
     val fileType = Using.Manager { use =>
-      val imageStream = use(createImageInputStream(file))
-      val readers = getImageReaders(imageStream)
+      val imageStream = use(ImageIO.createImageInputStream(file))
+      val readers = ImageIO.getImageReaders(imageStream)
       if (readers.hasNext)
         Some(readers.next.getFormatName.toLowerCase)
       else
