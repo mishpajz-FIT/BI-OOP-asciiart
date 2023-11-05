@@ -2,12 +2,10 @@ package importers.image
 
 import models.image.Image
 import models.pixel.RGBAPixel
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.MockitoSugar.{mock, when}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{FlatSpec, Matchers}
 
-import java.io.{File, FileOutputStream}
+import java.io.File
 import java.nio.file.Paths
 
 class ImageFileImporterSpecs extends FlatSpec with Matchers {

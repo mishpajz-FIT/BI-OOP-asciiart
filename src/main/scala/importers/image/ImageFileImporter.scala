@@ -37,20 +37,17 @@ object ImageFileImporter {
       }
     }
 
-  private def getFileType(file: File): Option[String] = {
+  private def getFileType(file: File): Option[String] =
     // https://stackoverflow.com/questions/11447035/java-get-image-extension-type-using-bufferedimage-from-url
-    val fileType = Using.Manager { use =>
-      val imageStream = use(ImageIO.createImageInputStream(file))
-      val readers = ImageIO.getImageReaders(imageStream)
-      if (readers.hasNext)
-        Some(readers.next.getFormatName.toLowerCase)
-      else
-        None
-    }
-
-    fileType match {
-      case Success(value) => value
-      case Failure(_)     => None
-    }
-  }
+    Using
+      .Manager { use =>
+        val imageStream = use(ImageIO.createImageInputStream(file))
+        val readers = ImageIO.getImageReaders(imageStream)
+        if (readers.hasNext)
+          Some(readers.next.getFormatName.toLowerCase)
+        else
+          None
+      }
+      .toOption
+      .flatten
 }

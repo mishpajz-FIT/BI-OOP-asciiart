@@ -4,9 +4,9 @@ import importers.image.wrappers.ImageIOReadWrapper
 import models.image.Image
 import models.pixel.RGBAPixel
 
-import java.awt.Color
 import java.awt.image.BufferedImage
 import javax.imageio.stream.ImageInputStream
+import scala.collection.immutable.ArraySeq
 import scala.util.Try
 
 class ImageStreamImporter(inputStream: ImageInputStream)
@@ -20,24 +20,29 @@ class ImageStreamImporter(inputStream: ImageInputStream)
       val width = bufferedImage.getWidth()
       val height = bufferedImage.getHeight()
 
-      val pixelsBuilder = Vector.newBuilder[Vector[RGBAPixel]]
+      val pixelsArray = Array.ofDim[RGBAPixel](height, width)
 
-      for (y <- 0 until height) {
-        val rowBuilder = Vector.newBuilder[RGBAPixel]
+      for (y <- 0 until height)
         for (x <- 0 until width) {
-          val color = new Color(bufferedImage.getRGB(x, y), true)
-          rowBuilder.addOne(
-            RGBAPixel(
-              color.getRed,
-              color.getGreen,
-              color.getBlue,
-              color.getAlpha))
-        }
-        pixelsBuilder.addOne(rowBuilder.result())
-      }
 
-      new Image(width, height, pixelsBuilder.result())
-    }.toOption
+          val color = bufferedImage.getRGB(x, y)
+
+          // Done using bit-shifts for performance reasons
+          // (https://stackoverflow.com/questions/25761438/understanding-bufferedimage-getrgb-output-values)
+          val b = color & 0xff
+          val g = (color >> 8) & 0xff
+          val r = (color >> 16) & 0xff
+          val a = (color >> 24) & 0xff
+
+          pixelsArray(y)(x) = RGBAPixel(r, g, b, a)
+        }
+
+      val pixels = ArraySeq.unsafeWrapArray(
+        pixelsArray.map(rowArray => ArraySeq.unsafeWrapArray(rowArray))
+      )
+
+      Image(pixels)
+    }.flatten.toOption
 
   override def retrieve(): Option[Image[RGBAPixel]] = readFromStream()
 }
