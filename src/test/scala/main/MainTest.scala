@@ -1,4 +1,4 @@
-package MainTest
+package main
 
 import org.scalatest.FunSuite
 
