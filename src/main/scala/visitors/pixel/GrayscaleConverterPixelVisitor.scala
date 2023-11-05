@@ -1,5 +1,6 @@
-package models.pixel.visitors
+package visitors.pixel
 
+import models.pixel.visitor.PixelVisitor
 import models.pixel.{GrayscalePixel, RGBAPixel}
 
 class GrayscaleConverterPixelVisitor extends PixelVisitor[GrayscalePixel] {

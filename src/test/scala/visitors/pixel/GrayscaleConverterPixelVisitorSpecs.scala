@@ -1,6 +1,6 @@
-package models.pixel.visitors
+package visitors.pixel
 
-import models.pixel.{RGBAPixel, GrayscalePixel}
+import models.pixel.{GrayscalePixel, RGBAPixel}
 import org.scalatest.{FlatSpec, Matchers}
 
 class GrayscaleConverterPixelVisitorSpecs extends FlatSpec with Matchers {

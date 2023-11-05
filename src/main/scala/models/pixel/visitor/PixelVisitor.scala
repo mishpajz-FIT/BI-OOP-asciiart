@@ -1,4 +1,4 @@
-package models.pixel.visitors
+package models.pixel.visitor
 
 import models.pixel.{GrayscalePixel, Pixel, RGBAPixel}
 
