@@ -1,3 +1,7 @@
 package models.pixel
 
-trait Pixel {}
+import models.pixel.visitor.PixelVisitor
+
+trait Pixel {
+  def accept[T](visitor: PixelVisitor[T]): T
+}
