@@ -1,6 +1,6 @@
 package visitors.pixel
 
-import models.pixel.{GrayscalePixel, RGBAPixel}
+import models.pixel.{ASCIIPixel, GrayscalePixel, RGBAPixel}
 import org.scalatest.{FlatSpec, Matchers}
 
 class GrayscaleConverterPixelVisitorSpecs extends FlatSpec with Matchers {
@@ -43,5 +43,13 @@ class GrayscaleConverterPixelVisitorSpecs extends FlatSpec with Matchers {
     val grayscalePixel = pixel.accept(visitor)
 
     grayscalePixel.intensity shouldBe 157
+  }
+
+  it should "return ancestor when provided with ASCIIPixel" in {
+    val pixel = ASCIIPixel(42, 'X')
+
+    val grayscalePixel = pixel.accept(visitor)
+
+    grayscalePixel.intensity shouldBe 42
   }
 }
