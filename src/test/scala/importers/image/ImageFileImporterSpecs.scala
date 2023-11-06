@@ -4,7 +4,6 @@ import models.image.Image
 import models.pixel.RGBAPixel
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{FlatSpec, Matchers}
-import transformers.image.concrete.GrayscaleImageTransformer
 
 import java.io.File
 import java.nio.file.Paths

@@ -1,7 +1,7 @@
 package transformers.image.concrete
 
 import models.image.Image
-import models.pixel.{ASCIIPixel, GrayscalePixel, Pixel, RGBAPixel}
+import models.pixel.{ASCIIPixel, GrayscalePixel, RGBAPixel}
 import org.scalatest.{FlatSpec, Matchers}
 
 class GrayscaleImageTransformerSpecs extends FlatSpec with Matchers {
@@ -20,14 +20,11 @@ class GrayscaleImageTransformerSpecs extends FlatSpec with Matchers {
 
     val result = transformer.transform(image)
 
-    result.isDefined shouldBe true
-    val grayscaleImage = result.get
+    result.height shouldBe 1
+    result.width shouldBe 3
 
-    grayscaleImage.height shouldBe 1
-    grayscaleImage.width shouldBe 3
-
-    grayscaleImage.getPixel(0, 0).intensity shouldBe 255
-    grayscaleImage
+    result.getPixel(0, 0).intensity shouldBe 255
+    result
       .getPixel(2, 0)
       .intensity shouldBe (0.299 * 100 + 0.587 * 200 + 0.114 * 150).toInt
   }
@@ -45,15 +42,11 @@ class GrayscaleImageTransformerSpecs extends FlatSpec with Matchers {
 
     val result = transformer.transform(image)
 
-    result.isDefined shouldBe true
-    val grayscaleImage = result.get
+    result.height shouldBe 1
+    result.width shouldBe 3
 
-    grayscaleImage.height shouldBe 1
-    grayscaleImage.width shouldBe 3
-
-    grayscaleImage.getPixel(0, 0).intensity shouldBe 0
-    grayscaleImage.getPixel(1, 0).intensity shouldBe 25
-    grayscaleImage.getPixel(2, 0).intensity shouldBe 255
+    result.getPixel(0, 0).intensity shouldBe 0
+    result.getPixel(1, 0).intensity shouldBe 25
+    result.getPixel(2, 0).intensity shouldBe 255
   }
-
 }

@@ -5,4 +5,4 @@ import models.pixel.Pixel
 import transformers.Transformer
 
 trait ImageTransformer[-T <: Pixel, +R <: Pixel]
-    extends Transformer[Image[T], Option[Image[R]]] {}
+    extends Transformer[Image[T], Image[R]] {}

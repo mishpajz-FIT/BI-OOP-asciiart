@@ -5,13 +5,11 @@ import models.pixel.{GrayscalePixel, Pixel}
 import transformers.image.ImageTransformer
 import visitors.pixel.GrayscaleConverterPixelVisitor
 
-import scala.collection.immutable.ArraySeq
-
 final case class GrayscaleImageTransformer()
     extends ImageTransformer[Pixel, GrayscalePixel] {
 
-  def transform(item: Image[Pixel]): Option[Image[GrayscalePixel]] = {
+  def transform(item: Image[Pixel]): Image[GrayscalePixel] = {
     val visitor = new GrayscaleConverterPixelVisitor
-    Some(item.map(pixel => pixel.accept(visitor)))
+    item.map(pixel => pixel.accept(visitor))
   }
 }

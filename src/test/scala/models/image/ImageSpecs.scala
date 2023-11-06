@@ -1,7 +1,6 @@
 package models.image
 
-import models.pixel.{GrayscalePixel, Pixel, RGBAPixel}
-import org.mockito.Mockito.mock
+import models.pixel.{GrayscalePixel, RGBAPixel}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -71,7 +70,7 @@ class ImageSpecs extends FlatSpec with Matchers {
     image.width shouldBe 2
   }
 
-  it should "update pixel in copy of image when using withPixel" in {
+  it should "when using withPixel return image with updated pixel" in {
     val pixels = Vector(
       Vector(GrayscalePixel(7), RGBAPixel(1, 2, 3, 4))
     )
@@ -96,7 +95,7 @@ class ImageSpecs extends FlatSpec with Matchers {
     originalPixel.intensity shouldBe 7
   }
 
-  it should "update all pixels in copy of image when using map" in {
+  it should "when using map return image with all pixels updated" in {
     val pixels = Vector(
       Vector(GrayscalePixel(5), GrayscalePixel(10))
     )
