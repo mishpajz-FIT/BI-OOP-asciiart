@@ -7,7 +7,7 @@ import visitors.pixel.GrayscaleConverterPixelVisitor
 
 import scala.collection.immutable.ArraySeq
 
-class GrayscaleImageTransformer
+final case class GrayscaleImageTransformer()
     extends ImageTransformer[Pixel, GrayscalePixel] {
 
   def transform(item: Image[Pixel]): Option[Image[GrayscalePixel]] = {
