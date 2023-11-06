@@ -3,8 +3,8 @@ package importers.image
 import java.io.File
 import javax.imageio.ImageIO
 import javax.imageio.stream.FileImageInputStream
-import scala.util.{Failure, Success, Try, Using}
 import scala.util.control.NonFatal
+import scala.util.{Try, Using}
 
 class ImageFileImporter private (file: File)
     extends ImageStreamImporter(new FileImageInputStream(file)) {}

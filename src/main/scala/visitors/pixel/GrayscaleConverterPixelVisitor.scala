@@ -1,7 +1,7 @@
 package visitors.pixel
 
 import models.pixel.visitor.PixelVisitor
-import models.pixel.{GrayscalePixel, RGBAPixel}
+import models.pixel.{ASCIIPixel, GrayscalePixel, RGBAPixel}
 
 class GrayscaleConverterPixelVisitor extends PixelVisitor[GrayscalePixel] {
   override def visit(pixel: RGBAPixel): GrayscalePixel = {
@@ -21,4 +21,7 @@ class GrayscaleConverterPixelVisitor extends PixelVisitor[GrayscalePixel] {
   }
 
   override def visit(pixel: GrayscalePixel): GrayscalePixel = pixel
+
+  override def visit(pixel: ASCIIPixel): GrayscalePixel =
+    visit(pixel: GrayscalePixel)
 }
