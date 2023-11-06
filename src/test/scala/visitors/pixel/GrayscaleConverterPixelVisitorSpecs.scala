@@ -17,7 +17,7 @@ class GrayscaleConverterPixelVisitorSpecs extends FlatSpec with Matchers {
     grayscalePixel.intensity shouldBe calculatedIntensity
   }
 
-  it should "convert pure colored RGBAPixel to GrayscalePixel" in {
+  it should "convert black and white RGBAPixel to GrayscalePixel" in {
     val white = RGBAPixel(255, 255, 255)
     val black = RGBAPixel(0, 0, 0)
 

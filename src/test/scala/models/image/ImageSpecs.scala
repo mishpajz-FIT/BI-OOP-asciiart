@@ -71,9 +71,9 @@ class ImageSpecs extends FlatSpec with Matchers {
     image.width shouldBe 2
   }
 
-  it should "update an image with pixels of different type" in {
+  it should "update pixel in copy of image when using withPixel" in {
     val pixels = Vector(
-      Vector(GrayscalePixel(1), RGBAPixel(1, 2, 3, 4))
+      Vector(GrayscalePixel(7), RGBAPixel(1, 2, 3, 4))
     )
 
     val image = Image(pixels).get
@@ -89,5 +89,25 @@ class ImageSpecs extends FlatSpec with Matchers {
     updatedPixel.g shouldBe 3
     updatedPixel.b shouldBe 2
     updatedPixel.a shouldBe 1
+
+    image.getPixel(0, 0) shouldBe a[GrayscalePixel]
+
+    val originalPixel = image.getPixel(0, 0).asInstanceOf[GrayscalePixel]
+    originalPixel.intensity shouldBe 7
+  }
+
+  it should "update all pixels in copy of image when using map" in {
+    val pixels = Vector(
+      Vector(GrayscalePixel(5), GrayscalePixel(10))
+    )
+
+    val image = Image(pixels).get
+    val updatedImage = image.map(pixel => GrayscalePixel(pixel.intensity * 3))
+
+    updatedImage.getPixel(0, 0).intensity shouldBe 15
+    updatedImage.getPixel(1, 0).intensity shouldBe 30
+
+    image.getPixel(0, 0).intensity shouldBe 5
+    image.getPixel(1, 0).intensity shouldBe 10
   }
 }

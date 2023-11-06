@@ -12,18 +12,6 @@ final case class GrayscaleImageTransformer()
 
   def transform(item: Image[Pixel]): Option[Image[GrayscalePixel]] = {
     val visitor = new GrayscaleConverterPixelVisitor
-
-    val grayscalePixelsArray =
-      Array.ofDim[GrayscalePixel](item.height, item.width)
-
-    for (y <- 0 until item.height)
-      for (x <- 0 until item.width)
-        grayscalePixelsArray(y)(x) = item.getPixel(x, y).accept(visitor)
-
-    val pixels = ArraySeq.unsafeWrapArray(
-      grayscalePixelsArray.map(rowArray => ArraySeq.unsafeWrapArray(rowArray))
-    )
-
-    Image(pixels).toOption
+    Some(item.map(pixel => pixel.accept(visitor)))
   }
 }

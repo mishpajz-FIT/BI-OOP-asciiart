@@ -14,6 +14,13 @@ class Image[+T <: Pixel](
     val updatedRow = pixels(y).updated(x, value)
     new Image(width, height, pixels.updated(y, updatedRow))
   }
+
+  def map[R <: Pixel](f: T => R): Image[R] = {
+    val transformedPixels = pixels.map { row =>
+      row.map(f)
+    }
+    new Image(width, height, transformedPixels)
+  }
 }
 
 object Image {

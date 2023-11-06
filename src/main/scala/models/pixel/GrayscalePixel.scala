@@ -4,6 +4,7 @@ import models.pixel.visitor.PixelVisitor
 class GrayscalePixel(val intensity: Int) extends Pixel {
   override def accept[T](visitor: PixelVisitor[T]): T = visitor.visit(this)
 
+  // Methods that would be implemented by "case class" but cannot as this is extended.
   // $COVERAGE-OFF$
   override def equals(obj: Any): Boolean = obj match {
     case otherGrayscale: GrayscalePixel =>
@@ -21,9 +22,7 @@ class GrayscalePixel(val intensity: Int) extends Pixel {
 }
 
 object GrayscalePixel {
-  // $COVERAGE-OFF$
   def apply(i: Int): GrayscalePixel = new GrayscalePixel(i)
 
   def unapply(pixel: GrayscalePixel): Option[Int] = Some(pixel.intensity)
-  // $COVERAGE-ON$
 }
