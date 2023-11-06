@@ -6,9 +6,11 @@ import javax.imageio.stream.FileImageInputStream
 import scala.util.control.NonFatal
 import scala.util.{Try, Using}
 
+// TODO: separate into different classes for individual formats
 class ImageFileImporter private (file: File)
     extends ImageStreamImporter(new FileImageInputStream(file)) {}
 
+// TODO: change into registry pattern
 object ImageFileImporter {
   private val allowedFileTypes = Set("png", "jpeg")
 

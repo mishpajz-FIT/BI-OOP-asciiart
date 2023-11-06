@@ -24,5 +24,8 @@ class GrayscalePixel(val intensity: Int) extends Pixel {
 object GrayscalePixel {
   def apply(i: Int): GrayscalePixel = new GrayscalePixel(i)
 
+  // Methods that would be implemented by "case class" but cannot as this is extended.
+  // $COVERAGE-OFF$
   def unapply(pixel: GrayscalePixel): Option[Int] = Some(pixel.intensity)
+  // $COVERAGE-ON$
 }
