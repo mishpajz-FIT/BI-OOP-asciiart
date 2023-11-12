@@ -29,7 +29,7 @@ class ImageStreamImporterSpecs extends FlatSpec with Matchers {
     with TestImageIOReadWrapper
     val result = streamImporter.retrieve()
 
-    result should be(None)
+    result.isEmpty shouldBe true
   }
 
   it should "return None if BufferedImage is null" in {
@@ -45,7 +45,7 @@ class ImageStreamImporterSpecs extends FlatSpec with Matchers {
     with TestImageIOReadWrapper
     val result = streamImporter.retrieve()
 
-    result should be(None)
+    result.isEmpty shouldBe true
   }
 
   it should "return Image[RGBAPixel] when provided with correct stream" in {
