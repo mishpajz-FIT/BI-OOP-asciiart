@@ -11,7 +11,8 @@ class NonlinearASCIITableSpecs extends FlatSpec with Matchers {
 
   it should "return correct character for given intensity" in {
     table.characterFor(1) shouldBe 'a'
-    table.characterFor(100) shouldBe 'b'
+    table.characterFor(100) shouldBe 'a'
+    table.characterFor(101) shouldBe 'b'
     table.characterFor(128) shouldBe 'b'
 
   }
