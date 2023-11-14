@@ -3,12 +3,13 @@ package filters.image.concrete
 import models.image.Image
 import models.pixel.GrayscalePixel
 import org.scalatest.{FlatSpec, Matchers}
+
 class InverseImageFilterSpecs extends FlatSpec with Matchers {
   behavior of "InverseImageFilter"
 
   val filter: InverseImageFilter = InverseImageFilter()
 
-  it should "return inverted GrayscalePixel for Image[GrayscalePixel]" in {
+  it should "return Image with inverted GrayscalePixel for Image[GrayscalePixel]" in {
     val pixels = Vector(
       Vector(
         GrayscalePixel(0),
@@ -30,7 +31,7 @@ class InverseImageFilterSpecs extends FlatSpec with Matchers {
 
   }
 
-  it should "return inverted GrayscalePixel with corrected ranges for Image[GrayscalePixel] with out of range intensities" in {
+  it should "return Image with inverted GrayscalePixel with corrected ranges for Image[GrayscalePixel] with out of range intensities" in {
     val pixels = Vector(Vector(GrayscalePixel(-1), GrayscalePixel(300)))
 
     val image = Image(pixels).get
@@ -40,7 +41,7 @@ class InverseImageFilterSpecs extends FlatSpec with Matchers {
     result.height shouldBe 1
     result.width shouldBe 2
 
-    result.getPixel(0, 0).intensity shouldBe 256
+    result.getPixel(0, 0).intensity shouldBe 255
     result.getPixel(1, 0).intensity shouldBe 0
   }
 
