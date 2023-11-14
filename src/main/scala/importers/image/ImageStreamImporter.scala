@@ -3,6 +3,7 @@ package importers.image
 import importers.image.wrappers.ImageIOReadWrapper
 import models.image.Image
 import models.pixel.RGBAPixel
+import utilities.ArrayUtilities
 
 import java.awt.image.BufferedImage
 import javax.imageio.stream.ImageInputStream
@@ -37,9 +38,7 @@ class ImageStreamImporter(inputStream: ImageInputStream)
           pixelsArray(y)(x) = RGBAPixel(r, g, b, a)
         }
 
-      val pixels = ArraySeq.unsafeWrapArray(
-        pixelsArray.map(rowArray => ArraySeq.unsafeWrapArray(rowArray))
-      )
+      val pixels = ArrayUtilities.wrap2DArray(pixelsArray)
 
       Image(pixels)
     }.flatten.toOption

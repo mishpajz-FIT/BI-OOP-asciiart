@@ -4,6 +4,7 @@ import filters.image.ImageFilter
 import filters.image.concrete.Scales.{Four, Identity, Quarter, Scale}
 import models.image.Image
 import models.pixel.Pixel
+import utilities.ArrayUtilities
 
 import scala.collection.immutable.ArraySeq
 import scala.reflect.ClassTag
@@ -15,30 +16,28 @@ final case class ScaleImageFilter[T <: Pixel: ClassTag](scale: Scale)
     scale match {
       case Quarter  => downscale(item)
       case Identity => item
-      case Four     => upscale(item, 2)
+      case Four     => upscale(item)
     }
 
-  private def downscale(image: Image[T]): Image[T] = {
-    val downscaledWidth = math.ceil(image.width / 2.0).toInt
-    val downscaledHeight = math.ceil(image.height / 2.0).toInt
+  private def downscale(image: Image[T], scale: Int = 2): Image[T] = {
+    val downscaledWidth = math.ceil(image.width / scale.toDouble).toInt
+    val downscaledHeight = math.ceil(image.height / scale.toDouble).toInt
 
     val downscaledPixels = Array.ofDim[T](downscaledHeight, downscaledWidth)
 
     for (y <- 0 until downscaledHeight)
       for (x <- 0 until downscaledWidth) {
-        val maxX = math.min(x * 2 + Random.nextInt(1), image.width - 1)
-        val maxY = math.min(y * 2 + Random.nextInt(1), image.height - 1)
+        val maxX = math.min(x * scale + Random.nextInt(1), image.width - 1)
+        val maxY = math.min(y * scale + Random.nextInt(1), image.height - 1)
         downscaledPixels(y)(x) = image.getPixel(maxX, maxY)
       }
 
-    val pixels = ArraySeq.unsafeWrapArray(
-      downscaledPixels.map(rowArray => ArraySeq.unsafeWrapArray(rowArray))
-    )
+    val pixels = ArrayUtilities.wrap2DArray(downscaledPixels)
 
     Image(pixels).getOrElse(image)
   }
 
-  private def upscale(image: Image[T], scale: Int): Image[T] = {
+  private def upscale(image: Image[T], scale: Int = 2): Image[T] = {
     val width = image.width
     val height = image.height
 
@@ -54,9 +53,7 @@ final case class ScaleImageFilter[T <: Pixel: ClassTag](scale: Scale)
             upscaledPixels(y * scale + plusY)(x * scale + plusX) =
               image.getPixel(x, y)
 
-    val pixels = ArraySeq.unsafeWrapArray(
-      upscaledPixels.map(rowArray => ArraySeq.unsafeWrapArray(rowArray))
-    )
+    val pixels = ArrayUtilities.wrap2DArray(upscaledPixels)
 
     Image(pixels).getOrElse(image)
   }

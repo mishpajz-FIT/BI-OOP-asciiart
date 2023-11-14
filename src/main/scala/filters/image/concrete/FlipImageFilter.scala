@@ -3,6 +3,7 @@ package filters.image.concrete
 import filters.image.ImageFilter
 import models.image.Image
 import models.pixel.Pixel
+import utilities.ArrayUtilities
 import utilities.Axes.{Axis, X, Y}
 
 import scala.collection.immutable.ArraySeq
@@ -28,9 +29,7 @@ final case class FlipImageFilter[T <: Pixel: ClassTag](axis: Axis)
         pixelsArray(adjusted._2)(adjusted._1) = item.getPixel(x, y)
       }
 
-    val pixels = ArraySeq.unsafeWrapArray(
-      pixelsArray.map(rowArray => ArraySeq.unsafeWrapArray(rowArray))
-    )
+    val pixels = ArrayUtilities.wrap2DArray(pixelsArray)
 
     Image(pixels).getOrElse(item)
   }
