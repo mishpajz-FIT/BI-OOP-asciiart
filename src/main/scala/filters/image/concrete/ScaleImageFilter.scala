@@ -19,8 +19,8 @@ final case class ScaleImageFilter[T <: Pixel: ClassTag](scale: Scale)
     }
 
   private def downscale(image: Image[T]): Image[T] = {
-    val downscaledWidth = math.max(image.width, 1)
-    val downscaledHeight = math.max(image.height, 1)
+    val downscaledWidth = math.ceil(image.width / 2.0).toInt
+    val downscaledHeight = math.ceil(image.height / 2.0).toInt
 
     val downscaledPixels = Array.ofDim[T](downscaledHeight, downscaledWidth)
 

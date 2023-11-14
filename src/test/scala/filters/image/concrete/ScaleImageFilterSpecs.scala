@@ -81,8 +81,8 @@ class ScaleImageFilterSpecs extends FlatSpec with Matchers {
 
     val result = filter.transform(image)
 
-    result.width shouldBe 4
-    result.height shouldBe 4
+    result.width shouldBe 2
+    result.height shouldBe 2
 
     result.getPixel(0, 0).identification shouldBe 'A'
     result.getPixel(1, 0).identification shouldBe 'B'
@@ -90,7 +90,7 @@ class ScaleImageFilterSpecs extends FlatSpec with Matchers {
     result.getPixel(1, 1).identification shouldBe 'D'
   }
 
-  it should "return correctly upscaled Image if the image has smaller dimensions than scale rate" in {
+  it should "return correctly upscaled Image if the image has different dimensions" in {
     val pixels = Vector(
       Vector(MockedPixel('A'), MockedPixel('B'))
     )
@@ -132,7 +132,24 @@ class ScaleImageFilterSpecs extends FlatSpec with Matchers {
     result.getPixel(1, 0).identification shouldBe 'C'
   }
 
-  it should "return identity of Image when no scaling is required" in {
+  it should "return identity of downscaled Image if downscaling isn't possible" in {
+    val pixels = Vector(
+      Vector(MockedPixel('A'))
+    )
+
+    val image = Image(pixels).get
+
+    val filter = ScaleImageFilter[MockedPixel](Quarter)
+
+    val result = filter.transform(image)
+
+    result.height shouldBe 1
+    result.width shouldBe 1
+
+    result.getPixel(0, 0).identification shouldBe 'A'
+  }
+
+  it should "return identity of Image when no scale is selected" in {
     val pixels = Vector(
       Vector(MockedPixel('A'), MockedPixel('B')),
       Vector(MockedPixel('C'), MockedPixel('D'))
@@ -144,9 +161,12 @@ class ScaleImageFilterSpecs extends FlatSpec with Matchers {
 
     val result = filter.transform(image)
 
-    result.height shouldBe 4
-    result.width shouldBe 4
+    result.height shouldBe 2
+    result.width shouldBe 2
 
-    result shouldBe image
+    result.getPixel(0, 0).identification shouldBe 'A'
+    result.getPixel(1, 0).identification shouldBe 'B'
+    result.getPixel(0, 1).identification shouldBe 'C'
+    result.getPixel(1, 1).identification shouldBe 'D'
   }
 }

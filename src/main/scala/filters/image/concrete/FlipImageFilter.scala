@@ -10,6 +10,7 @@ import scala.reflect.ClassTag
 
 final case class FlipImageFilter[T <: Pixel: ClassTag](axis: Axis)
     extends ImageFilter[T] {
+
   override def transform(item: Image[T]): Image[T] = {
     val height = item.height
     val width = item.width
@@ -20,8 +21,8 @@ final case class FlipImageFilter[T <: Pixel: ClassTag](axis: Axis)
       for (x <- 0 until width) {
 
         val adjusted: (Int, Int) = axis match {
-          case X => (x, width - y - 1)
-          case Y => (height - x - 1, y)
+          case X => (x, height - y - 1)
+          case Y => (width - x - 1, y)
         }
 
         pixelsArray(adjusted._2)(adjusted._1) = item.getPixel(x, y)

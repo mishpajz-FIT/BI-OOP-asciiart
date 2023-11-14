@@ -54,10 +54,10 @@ class FlipImageFilterSpecs extends FlatSpec with Matchers {
     result.width shouldBe 3
 
     result.getPixel(0, 0).identification shouldBe 3
-    result.getPixel(1, 0).identification shouldBe 6
+    result.getPixel(1, 0).identification shouldBe 2
     result.getPixel(2, 0).identification shouldBe 1
     result.getPixel(0, 1).identification shouldBe 6
-    result.getPixel(1, 1).identification shouldBe 1
+    result.getPixel(1, 1).identification shouldBe 5
     result.getPixel(2, 1).identification shouldBe 4
   }
 
