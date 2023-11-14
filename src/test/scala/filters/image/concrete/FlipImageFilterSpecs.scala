@@ -1,6 +1,5 @@
 package filters.image.concrete
 
-import jdk.jshell.spi.ExecutionControl.NotImplementedException
 import models.image.Image
 import models.pixel.Pixel
 import models.pixel.visitor.PixelVisitor
@@ -12,7 +11,7 @@ class FlipImageFilterSpecs extends FlatSpec with Matchers {
 
   final private case class MockedPixel(identification: Int) extends Pixel {
     override def accept[T](visitor: PixelVisitor[T]): T =
-      throw new NotImplementedException("mock type")
+      throw new NotImplementedError("mock type")
   }
 
   it should "return Image flipped alongside X axis" in {

@@ -1,7 +1,6 @@
 package filters.image.concrete
 
 import filters.image.concrete.Scales.{Four, Identity, Quarter}
-import jdk.jshell.spi.ExecutionControl.NotImplementedException
 import models.image.Image
 import models.pixel.Pixel
 import models.pixel.visitor.PixelVisitor
@@ -12,7 +11,7 @@ class ScaleImageFilterSpecs extends FlatSpec with Matchers {
 
   final private case class MockedPixel(identification: Char) extends Pixel {
     override def accept[T](visitor: PixelVisitor[T]): T =
-      throw new NotImplementedException("mock type")
+      throw new NotImplementedError("mock type")
   }
 
   it should "return correctly upscaled Image" in {
