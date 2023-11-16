@@ -1,4 +1,4 @@
-package models.asciitable.registry
+package registries.models.asciitable
 
 import models.asciitable.{ASCIITable, LinearASCIITable}
 
