@@ -100,6 +100,7 @@ class FileASCIIImageExporterSpecs extends FlatSpec with Matchers {
 
     exporter.export(image1)
     exporter.close()
+
     val caught = intercept[Exception] {
       exporter.export(image2)
     }
