@@ -2,6 +2,7 @@ package exporters.asciiimage.text
 
 import models.image.Image
 import models.pixel.ASCIIPixel
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{FlatSpec, Matchers}
 
 import java.io.{ByteArrayOutputStream, OutputStreamWriter}
@@ -28,7 +29,8 @@ class StreamASCIIImageExporterSpecs extends FlatSpec with Matchers {
 
     val exporter = new StreamASCIIImageExporter(writer)
 
-    exporter.export(image)
+    val result = exporter.export(image)
+    result.isSuccess shouldBe true
     exporter.close()
 
     val outputString = outputStream.toString("UTF-8").trim
@@ -59,13 +61,12 @@ class StreamASCIIImageExporterSpecs extends FlatSpec with Matchers {
 
     val exporter = new StreamASCIIImageExporter(writer)
 
-    exporter.export(image1)
-    exporter.close()
-    val caught = intercept[Exception] {
-      exporter.export(image2)
-    }
+    val result1 = exporter.export(image1)
+    result1.isSuccess shouldBe true
     exporter.close()
 
-    caught shouldBe a[IllegalStateException]
+    val result2 = exporter.export(image2)
+    result2.failure.exception shouldBe an[IllegalStateException]
+    exporter.close()
   }
 }

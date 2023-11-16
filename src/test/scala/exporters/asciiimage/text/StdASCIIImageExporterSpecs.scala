@@ -30,7 +30,8 @@ class StdASCIIImageExporterSpecs extends FlatSpec with Matchers {
 
     val exporter = new StdASCIIImageExporter()
 
-    exporter.export(image)
+    val result = exporter.export(image)
+    result.isSuccess shouldBe true
 
     val outputString = replacementStream.toString("UTF-8").trim
     System.setOut(originalOut)
