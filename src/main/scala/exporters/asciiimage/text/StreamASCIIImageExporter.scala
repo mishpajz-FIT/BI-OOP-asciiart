@@ -1,12 +1,13 @@
-package exporters.asciiimage
+package exporters.asciiimage.text
 
+import exporters.asciiimage.ASCIIImageExporter
 import models.image.Image
 import models.pixel.ASCIIPixel
 
 import java.io.{Closeable, OutputStream, OutputStreamWriter}
 import java.nio.charset.StandardCharsets
 
-class ASCIIImageStreamExporter(writer: OutputStreamWriter)
+class StreamASCIIImageExporter(writer: OutputStreamWriter)
     extends ASCIIImageExporter
     with Closeable {
 

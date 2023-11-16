@@ -1,5 +1,7 @@
 package importers.image
 
+import importers.image.inputstream.InputStreamImageImporter
+
 import java.io.File
 import javax.imageio.ImageIO
 import javax.imageio.stream.FileImageInputStream
@@ -8,7 +10,7 @@ import scala.util.{Try, Using}
 
 // TODO: separate into different classes for individual formats
 class ImageFileImporter private (file: File)
-    extends ImageStreamImporter(new FileImageInputStream(file)) {}
+    extends InputStreamImageImporter(new FileImageInputStream(file)) {}
 
 // TODO: change into registry pattern
 object ImageFileImporter {

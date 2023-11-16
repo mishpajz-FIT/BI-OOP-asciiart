@@ -1,4 +1,4 @@
-package exporters.asciiimage
+package exporters.asciiimage.text
 
 import models.image.Image
 import models.pixel.ASCIIPixel
@@ -6,8 +6,8 @@ import org.scalatest.{FlatSpec, Matchers}
 
 import java.io.{ByteArrayOutputStream, PrintStream}
 
-class ASCIIImageStdExporterSpecs extends FlatSpec with Matchers {
-  behavior of "ASCIIImageStdExporter"
+class StdASCIIImageExporterSpecs extends FlatSpec with Matchers {
+  behavior of "StdASCIIImageExporter"
 
   it should "correctly write characters of an Image[ASCIIPixel] to a std output" in {
     val originalOut = System.out
@@ -28,7 +28,7 @@ class ASCIIImageStdExporterSpecs extends FlatSpec with Matchers {
 
     val image = Image(pixels).get
 
-    val exporter = new ASCIIImageStdExporter()
+    val exporter = new StdASCIIImageExporter()
 
     exporter.export(image)
 

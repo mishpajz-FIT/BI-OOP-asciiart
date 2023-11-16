@@ -1,16 +1,16 @@
-package importers.image
+package importers.image.inputstream
 
-import importers.image.wrappers.ImageIOReadWrapper
+import importers.image.ImageImporter
+import importers.image.inputstream.wrappers.ImageIOReadWrapper
 import models.image.Image
 import models.pixel.RGBAPixel
 import utilities.ArrayUtilities
 
 import java.awt.image.BufferedImage
 import javax.imageio.stream.ImageInputStream
-import scala.collection.immutable.ArraySeq
 import scala.util.Try
 
-class ImageStreamImporter(inputStream: ImageInputStream)
+class InputStreamImageImporter(inputStream: ImageInputStream)
     extends ImageImporter[RGBAPixel]
     with ImageIOReadWrapper {
 

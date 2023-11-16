@@ -1,4 +1,4 @@
-package exporters.asciiimage
+package exporters.asciiimage.text
 
 import models.image.Image
 import models.pixel.ASCIIPixel
@@ -8,8 +8,8 @@ import java.io.File
 import scala.io.Source
 import scala.util.Using
 
-class ASCIIImageFileExporterSpecs extends FlatSpec with Matchers {
-  behavior of "ASCIIImageFileExporter"
+class FileASCIIImageExporterSpecs extends FlatSpec with Matchers {
+  behavior of "FileASCIIImageExporter"
 
   it should "correctly write characters of an Image[ASCIIPixel] to a file" in {
     val outFile = File.createTempFile("exporterOut", ".txt")
@@ -27,7 +27,7 @@ class ASCIIImageFileExporterSpecs extends FlatSpec with Matchers {
 
     val image = Image(pixels).get
 
-    val exporter = new ASCIIImageFileExporter(outFile)
+    val exporter = new FileASCIIImageExporter(outFile)
 
     exporter.export(image)
     exporter.close()
@@ -61,7 +61,7 @@ class ASCIIImageFileExporterSpecs extends FlatSpec with Matchers {
     val image1 = Image(pixels1).get
     val image2 = Image(pixels2).get
 
-    val exporter = new ASCIIImageFileExporter(outFile)
+    val exporter = new FileASCIIImageExporter(outFile)
 
     exporter.export(image1)
     exporter.export(image2)
@@ -96,7 +96,7 @@ class ASCIIImageFileExporterSpecs extends FlatSpec with Matchers {
     val image1 = Image(pixels1).get
     val image2 = Image(pixels2).get
 
-    val exporter = new ASCIIImageFileExporter(outFile)
+    val exporter = new FileASCIIImageExporter(outFile)
 
     exporter.export(image1)
     exporter.close()
