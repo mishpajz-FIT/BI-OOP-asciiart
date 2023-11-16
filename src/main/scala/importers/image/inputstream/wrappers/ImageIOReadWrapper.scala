@@ -1,4 +1,4 @@
-package importers.image.wrappers
+package importers.image.inputstream.wrappers
 
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO

@@ -1,6 +1,6 @@
-package importers.image
+package importers.image.inputstream
 
-import importers.image.wrappers.ImageIOReadWrapper
+import importers.image.inputstream.wrappers.ImageIOReadWrapper
 import models.image.Image
 import models.pixel.RGBAPixel
 import org.mockito.ArgumentMatchers.anyInt
@@ -13,8 +13,8 @@ import java.awt.image.BufferedImage
 import java.io.IOException
 import javax.imageio.stream.ImageInputStream
 
-class ImageStreamImporterSpecs extends FlatSpec with Matchers {
-  behavior of "ImageStreamImporter"
+class InputStreamImageImporterSpecs extends FlatSpec with Matchers {
+  behavior of "InputStreamImageImporter"
 
   it should "return None if reading throws" in {
 
@@ -25,7 +25,7 @@ class ImageStreamImporterSpecs extends FlatSpec with Matchers {
 
     val inputStreamMock = mock(classOf[ImageInputStream])
 
-    val streamImporter = new ImageStreamImporter(inputStreamMock)
+    val streamImporter = new InputStreamImageImporter(inputStreamMock)
     with TestImageIOReadWrapper
     val result = streamImporter.retrieve()
 
@@ -41,7 +41,7 @@ class ImageStreamImporterSpecs extends FlatSpec with Matchers {
 
     val inputStreamMock = mock(classOf[ImageInputStream])
 
-    val streamImporter = new ImageStreamImporter(inputStreamMock)
+    val streamImporter = new InputStreamImageImporter(inputStreamMock)
     with TestImageIOReadWrapper
     val result = streamImporter.retrieve()
 
@@ -62,7 +62,7 @@ class ImageStreamImporterSpecs extends FlatSpec with Matchers {
 
     val inputStreamMock = mock(classOf[ImageInputStream])
 
-    val importer = new ImageStreamImporter(inputStreamMock)
+    val importer = new InputStreamImageImporter(inputStreamMock)
     with TestImageIOReadWrapper
     val image = importer.retrieve() match {
       case Some(value: Image[RGBAPixel]) => value

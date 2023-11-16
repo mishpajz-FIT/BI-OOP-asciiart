@@ -1,15 +1,16 @@
-package exporters.asciiimage
+package exporters.asciiimage.text
 
 import models.image.Image
 import models.pixel.ASCIIPixel
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{FlatSpec, Matchers}
 
 import java.io.File
 import scala.io.Source
 import scala.util.Using
 
-class ASCIIImageFileExporterSpecs extends FlatSpec with Matchers {
-  behavior of "ASCIIImageFileExporter"
+class FileASCIIImageExporterSpecs extends FlatSpec with Matchers {
+  behavior of "FileASCIIImageExporter"
 
   it should "correctly write characters of an Image[ASCIIPixel] to a file" in {
     val outFile = File.createTempFile("exporterOut", ".txt")
@@ -27,9 +28,11 @@ class ASCIIImageFileExporterSpecs extends FlatSpec with Matchers {
 
     val image = Image(pixels).get
 
-    val exporter = new ASCIIImageFileExporter(outFile)
+    val exporter = new FileASCIIImageExporter(outFile)
 
-    exporter.export(image)
+    val result = exporter.export(image)
+    result.isSuccess shouldBe true
+
     exporter.close()
 
     val outputString = Using(Source.fromFile(outFile)) { resource =>
@@ -61,10 +64,14 @@ class ASCIIImageFileExporterSpecs extends FlatSpec with Matchers {
     val image1 = Image(pixels1).get
     val image2 = Image(pixels2).get
 
-    val exporter = new ASCIIImageFileExporter(outFile)
+    val exporter = new FileASCIIImageExporter(outFile)
 
-    exporter.export(image1)
-    exporter.export(image2)
+    val result1 = exporter.export(image1)
+    result1.isSuccess shouldBe true
+
+    val result2 = exporter.export(image2)
+    result2.isSuccess shouldBe true
+
     exporter.close()
 
     val outputString = Using(Source.fromFile(outFile)) { resource =>
@@ -96,16 +103,15 @@ class ASCIIImageFileExporterSpecs extends FlatSpec with Matchers {
     val image1 = Image(pixels1).get
     val image2 = Image(pixels2).get
 
-    val exporter = new ASCIIImageFileExporter(outFile)
+    val exporter = new FileASCIIImageExporter(outFile)
 
-    exporter.export(image1)
+    val result1 = exporter.export(image1)
+    result1.isSuccess shouldBe true
     exporter.close()
-    val caught = intercept[Exception] {
-      exporter.export(image2)
-    }
+
+    val result2 = exporter.export(image2)
+    result2.failure.exception shouldBe an[IllegalStateException]
 
     outFile.delete()
-
-    caught shouldBe a[IllegalStateException]
   }
 }

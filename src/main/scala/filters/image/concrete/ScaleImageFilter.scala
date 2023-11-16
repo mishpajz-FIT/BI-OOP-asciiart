@@ -6,7 +6,6 @@ import models.image.Image
 import models.pixel.Pixel
 import utilities.ArrayUtilities
 
-import scala.collection.immutable.ArraySeq
 import scala.reflect.ClassTag
 import scala.util.Random
 

@@ -1,23 +1,18 @@
-package importers.image
+package importers.image.buffered
 
-import importers.image.wrappers.ImageIOReadWrapper
+import importers.image.ImageImporter
 import models.image.Image
 import models.pixel.RGBAPixel
 import utilities.ArrayUtilities
 
 import java.awt.image.BufferedImage
-import javax.imageio.stream.ImageInputStream
-import scala.collection.immutable.ArraySeq
 import scala.util.Try
 
-class ImageStreamImporter(inputStream: ImageInputStream)
-    extends ImageImporter[RGBAPixel]
-    with ImageIOReadWrapper {
+trait BufferedImageImporter extends ImageImporter[RGBAPixel] {
 
-  private def readFromStream(): Option[Image[RGBAPixel]] =
+  protected def createFrom(
+    bufferedImage: BufferedImage): Option[Image[RGBAPixel]] =
     Try {
-      val bufferedImage: BufferedImage = ioRead(inputStream)
-
       val width = bufferedImage.getWidth()
       val height = bufferedImage.getHeight()
 
@@ -42,6 +37,4 @@ class ImageStreamImporter(inputStream: ImageInputStream)
 
       Image(pixels)
     }.flatten.toOption
-
-  override def retrieve(): Option[Image[RGBAPixel]] = readFromStream()
 }

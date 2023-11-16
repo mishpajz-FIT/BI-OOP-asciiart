@@ -1,23 +1,34 @@
 package importers.image
 
+import importers.image.inputstream.{JPEGFileImageImporter, PNGFileImageImporter}
 import models.image.Image
 import models.pixel.RGBAPixel
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{FlatSpec, Matchers}
+import registries.Registry
 
 import java.io.File
 import java.nio.file.Paths
 
-class ImageFileImporterSpecs extends FlatSpec with Matchers {
-  behavior of "ImageFileImporter"
+class FileImageImporterSpecs extends FlatSpec with Matchers {
+  behavior of "FileImageImporter"
+
+  private class MockImporterRegistry
+      extends Registry[String, File => FileImageImporter] {
+    register("png", (file: File) => new PNGFileImageImporter(file))
+    register("jpg", (file: File) => new JPEGFileImageImporter(file))
+    register("jpeg", (file: File) => new JPEGFileImageImporter(file))
+  }
+  private val mockRegistry = new MockImporterRegistry()
 
   val isCI: Boolean = sys.env.getOrElse("CI", "false").toBoolean
 
-  it should "return Image[RGBAPixel] when provided with JPEG image" in {
+  it should "return Image[RGBAPixel] when provided with JPEG image with registered JPEGFileImageImporter importer" in {
     val testImageUri = getClass.getResource("/small-img3.jpeg").toURI
+    val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
     val importer =
-      ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString)
+      FileImageImporter(testImagePath, mockRegistry)
         .getOrElse(fail("Image importer was not created"))
 
     val image = importer.retrieve() match {
@@ -37,11 +48,12 @@ class ImageFileImporterSpecs extends FlatSpec with Matchers {
     pixel.a shouldBe 255
   }
 
-  it should "return Image[RGBAPixel] when provided with PNG image" in {
+  it should "return Image[RGBAPixel] when provided with PNG image with registered PNGFileImageImporter importer" in {
     val testImageUri = getClass.getResource("/small-img1.png").toURI
+    val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
     val importer =
-      ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString)
+      FileImageImporter(testImagePath, mockRegistry)
         .getOrElse(fail("Image importer was not created"))
 
     val image = importer.retrieve() match {
@@ -63,11 +75,12 @@ class ImageFileImporterSpecs extends FlatSpec with Matchers {
     image.getPixel(1, 3) shouldEqual RGBAPixel(0, 0, 0, 255)
   }
 
-  it should "return Image[RGBAPixel] when provided with transparent PNG image" in {
+  it should "return Image[RGBAPixel] when provided with transparent PNG image with registered PNGFileImageImporter importer" in {
     val testImageUri = getClass.getResource("/small-img2.png").toURI
+    val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
     val importer =
-      ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString)
+      FileImageImporter(testImagePath, mockRegistry)
         .getOrElse(fail("Image importer was not created"))
 
     val image = importer.retrieve() match {
@@ -83,13 +96,14 @@ class ImageFileImporterSpecs extends FlatSpec with Matchers {
     image.getPixel(0, 1) shouldEqual RGBAPixel(0, 0, 0, 0)
   }
 
-  it should "return Image[RGBAPixel] when provided with large JPG image" in {
+  it should "return Image[RGBAPixel] when provided with large JPG image with registered JPEGFileImageImporter importer" in {
     assume(!isCI) // image is too big for CI runner, therefore ignored there
 
     val testImageUri = getClass.getResource("/large-img1.jpg").toURI
+    val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
     val importer =
-      ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString)
+      FileImageImporter(testImagePath, mockRegistry)
         .getOrElse(fail("Image importer was not created"))
 
     val image = importer.retrieve() match {
@@ -102,11 +116,11 @@ class ImageFileImporterSpecs extends FlatSpec with Matchers {
     image.width shouldBe 5000
   }
 
-  it should "fail with IllegalArgumentException if when unsupported image format (BMP) is provided" in {
+  it should "fail with IllegalArgumentException if when unregistered image format (BMP) is provided" in {
     val testImageUri = getClass.getResource("/unsupported_format.bmp").toURI
+    val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
-    val result =
-      ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString)
+    val result = FileImageImporter(testImagePath, mockRegistry)
 
     result.failure.exception shouldBe an[IllegalArgumentException]
     result.failure.exception.getMessage should include(
@@ -115,9 +129,9 @@ class ImageFileImporterSpecs extends FlatSpec with Matchers {
 
   it should "fail with IllegalArgumentException if the file is directory" in {
     val testImageUri = getClass.getResource("/directory1").toURI
+    val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
-    val result =
-      ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString)
+    val result = FileImageImporter(testImagePath, mockRegistry)
 
     result.failure.exception shouldBe an[IllegalArgumentException]
     result.failure.exception.getMessage should include(
@@ -125,40 +139,31 @@ class ImageFileImporterSpecs extends FlatSpec with Matchers {
   }
 
   it should "fail with IllegalArgumentException if the file does not exist" in {
-    val result = ImageFileImporter("/nonexistent")
+    val result = FileImageImporter("/nonexistent", mockRegistry)
 
     result.failure.exception shouldBe an[IllegalArgumentException]
     result.failure.exception.getMessage should include(
       "is not usable file or doesn't exist")
-  }
-
-  it should "fail with IllegalArgumentException if the file cannot be processed" in {
-    val testImageUri = getClass.getResource("/text.txt").toURI
-
-    val result =
-      ImageFileImporter(Paths.get(testImageUri).toAbsolutePath.toString)
-
-    result.failure.exception shouldBe an[IllegalArgumentException]
-    result.failure.exception.getMessage should include(
-      "could not be opened or processed")
   }
 
   it should "fail with IllegalArgumentException if filepath is empty" in {
-    val result = ImageFileImporter("")
+    val result = FileImageImporter("", mockRegistry)
 
     result.failure.exception shouldBe an[IllegalArgumentException]
     result.failure.exception.getMessage should include(
       "is not usable file or doesn't exist")
   }
 
-  it should "fail with IllegalArgumentException if the image is empty" in {
-    val emptyImage = File.createTempFile("empty_img", "")
+  it should "return None when provided with empty image with registered PNGFileImageImporter importer" in {
+    val emptyImage = File.createTempFile("empty_img", ".png")
     emptyImage.deleteOnExit()
 
-    val result = ImageFileImporter(emptyImage.getAbsolutePath)
+    val importer =
+      FileImageImporter(emptyImage.toString, mockRegistry)
+        .getOrElse(fail("Image importer was not created"))
 
-    result.failure.exception shouldBe an[IllegalArgumentException]
-    result.failure.exception.getMessage should include(
-      "could not be opened or processed")
+    val image = importer.retrieve()
+
+    image.isEmpty shouldBe true
   }
 }
