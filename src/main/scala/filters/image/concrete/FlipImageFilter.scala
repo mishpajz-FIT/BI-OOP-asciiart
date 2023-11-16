@@ -6,7 +6,6 @@ import models.pixel.Pixel
 import utilities.ArrayUtilities
 import utilities.Axes.{Axis, X, Y}
 
-import scala.collection.immutable.ArraySeq
 import scala.reflect.ClassTag
 
 final case class FlipImageFilter[T <: Pixel: ClassTag](axis: Axis)

@@ -1,20 +1,11 @@
 package registries.models.asciitable
 
 import models.asciitable.{ASCIITable, LinearASCIITable}
+import registries.Registry
 
-object ASCIITableRegistry {
-  private var registry = Map[String, ASCIITable]()
+object ASCIITableRegistry extends Registry[String, ASCIITable] {
 
-  def registerTable(name: String, table: ASCIITable): Unit =
-    registry += (name -> table)
-
-  def getTable(name: String): Option[ASCIITable] =
-    registry.get(name)
-
-  def listTables(): Iterable[String] =
-    registry.keys
-
-  registerTable(
+  register(
     "bourke",
     new LinearASCIITable(
       """ .'`^",:;Il!i><~+_-?][}{1)(|\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"""))
