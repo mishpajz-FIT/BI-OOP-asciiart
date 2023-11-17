@@ -1,4 +1,4 @@
-package main
+package App
 
 object Main extends App {
   println("Hello there")
