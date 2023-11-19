@@ -6,23 +6,25 @@ import scala.annotation.tailrec
 
 class Parser[R](private val handlers: Seq[ParseHandler[R]]) {
 
+  private val preparedHandlers = handlers.to(LazyList)
+
   @tailrec
   private def parseRecursively(
     arguments: Seq[String],
-    existingItems: Seq[R]): Seq[R] = {
+    items: Seq[R]): Seq[R] = {
     if (arguments.isEmpty)
       return items
 
-    val (newArguments, item) = handlers.foldLeft((arguments, Option.empty[R])) {
-      case ((remainingArguments, None), nextHandler) =>
-        nextHandler.handle(remainingArguments)
-      case (result, _) => result
+    // LazyList will optimize this to get only the first non-None: https://alvinalexander.com/scala/how-to-use-stream-class-lazy-list-scala-cookbook/
+    val result = preparedHandlers
+      .flatMap(handler => handler.handle(arguments))
+      .headOption
+
+    result match {
+      case Some((newArguments, newItem)) =>
+        parseRecursively(newArguments, items.appended(newItem))
+      case None => parseRecursively(arguments.tail, items)
     }
-
-    if (existingItems.isEmpty)
-      return items
-
-    parseRecursively(newArguments, existingItems.appended(item.get))
   }
 
   def parse(arguments: Seq[String]): Seq[R] =

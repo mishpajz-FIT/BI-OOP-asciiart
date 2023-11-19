@@ -1,7 +1,6 @@
 package exporters.images.asciiimage.text
 
 import exporters.images.ImageExporter
-import exporters.images.asciiimage.ASCIIImageExporter
 import models.image.Image
 import models.pixel.ASCIIPixel
 
