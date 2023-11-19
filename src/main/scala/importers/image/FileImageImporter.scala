@@ -2,6 +2,7 @@ package importers.image
 
 import models.pixel.RGBAPixel
 import registries.Registry
+import registries.importers.image.FileImageImporterRegistry
 import utilities.FileUtilities.FileExtensions
 
 import java.io.File
@@ -15,8 +16,8 @@ trait FileImageImporter extends ImageImporter[RGBAPixel] {
 object FileImageImporter {
   def apply(
     filePath: String,
-    importerRegistry: Registry[String, File => FileImageImporter])
-    : Try[FileImageImporter] =
+    importerRegistry: Registry[String, File => FileImageImporter] =
+      FileImageImporterRegistry): Try[FileImageImporter] =
     Try {
       val file = new File(filePath)
 

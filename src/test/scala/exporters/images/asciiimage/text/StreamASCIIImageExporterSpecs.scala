@@ -1,4 +1,4 @@
-package exporters.asciiimage.text
+package exporters.images.asciiimage.text
 
 import models.image.Image
 import models.pixel.ASCIIPixel

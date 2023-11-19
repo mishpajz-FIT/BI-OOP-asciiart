@@ -1,6 +1,6 @@
-package exporters.asciiimage.text
+package exporters.images.asciiimage.text
 
-import exporters.asciiimage.ASCIIImageExporter
+import exporters.images.ImageExporter
 import models.image.Image
 import models.pixel.ASCIIPixel
 
@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets
 import scala.util.Try
 
 class StreamASCIIImageExporter(writer: OutputStreamWriter)
-    extends ASCIIImageExporter
+    extends ImageExporter[ASCIIPixel]
     with Closeable {
 
   private var closed = false
