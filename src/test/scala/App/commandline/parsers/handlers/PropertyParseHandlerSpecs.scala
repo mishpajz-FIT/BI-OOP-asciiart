@@ -1,11 +1,12 @@
-package App.parsers.handlers
+package App.commandline.parsers.handlers
 
+import App.commandline.parsers.handlers.PropertyParseHandler
 import org.scalatest.{FlatSpec, Matchers}
 
 class PropertyParseHandlerSpecs extends FlatSpec with Matchers {
   behavior of "PropertyParseHandler"
 
-  private val handler = new PropertyParseHandler(
+  private val handler = PropertyParseHandler(
     "--testProperty",
     (property: String) => s"yay: $property")
 

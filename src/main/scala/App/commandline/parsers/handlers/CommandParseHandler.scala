@@ -1,6 +1,6 @@
-package App.parsers.handlers
+package App.commandline.parsers.handlers
 
-class CommandParseHandler[T](command: String, item: () => T)
+final case class CommandParseHandler[T](command: String, item: () => T)
     extends ParseHandler[T] {
   override def handle(args: Seq[String]): Option[(Seq[String], T)] =
     args match {

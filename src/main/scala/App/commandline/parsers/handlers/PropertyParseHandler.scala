@@ -1,6 +1,6 @@
-package App.parsers.handlers
+package App.commandline.parsers.handlers
 
-class PropertyParseHandler[T](command: String, item: String => T)
+final case class PropertyParseHandler[T](command: String, item: String => T)
     extends ParseHandler[T] {
   override def handle(args: Seq[String]): Option[(Seq[String], T)] =
     args match {

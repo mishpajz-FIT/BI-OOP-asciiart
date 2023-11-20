@@ -1,11 +1,12 @@
-package App.parsers.handlers
+package App.commandline.parsers.handlers
 
+import App.commandline.parsers.handlers.CommandParseHandler
 import org.scalatest.{FlatSpec, Matchers}
 
 class CommandParseHandlerSpecs extends FlatSpec with Matchers {
   behavior of "CommandParseHandler"
 
-  private val handler = new CommandParseHandler("--testCommand", () => "yay")
+  private val handler = CommandParseHandler("--testCommand", () => "yay")
 
   it should "return item for correct command in args" in {
     val args = Seq("--testCommand")
