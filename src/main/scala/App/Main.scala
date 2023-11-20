@@ -24,6 +24,7 @@ import importers.image.{FileImageImporter, ImageImporter}
 import models.asciitable.{ASCIITable, LinearASCIITable}
 import models.pixel.{ASCIIPixel, GrayscalePixel, Pixel, RGBAPixel}
 
+import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 
 object Main extends App {
@@ -81,12 +82,12 @@ object Main extends App {
       filterParser,
       exporterParser)
   app.run(args) match {
-    case Success(_)         => println("ASCIIArt by Michal Dobes")
-    case Failure(exception) => println(s"Error: ${exception.getMessage}")
+    case Success(_)                   => println("ASCIIArt by Michal Dobes")
+    case Failure(NonFatal(exception)) => println(exception.getMessage)
+    case Failure(exception)           => throw exception
   }
 }
 
-//TODO: - controls
 //TODO: - refactoring
 // \- returning Failure instead of throwing
 //TODO: - comments
