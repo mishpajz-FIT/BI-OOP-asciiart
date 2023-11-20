@@ -6,7 +6,7 @@ import App.commandline.parsers.handlers.{
   CommandParseHandler,
   PropertyParseHandler
 }
-import App.commandline.parsers.parametrizer.concrete.{
+import App.commandline.parsers.parametrizers.concrete.{
   BrightenImageFilterParametrizer,
   FlipImageFilterParametrizer,
   ScaleImageFilterParametrizer,

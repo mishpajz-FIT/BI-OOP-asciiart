@@ -1,12 +1,12 @@
-package App.commandline.parsers.parametrizer.concrete
+package App.commandline.parsers.parametrizers.concrete
 
-import App.commandline.parsers.parametrizer.Parametrizer
+import App.commandline.parsers.parametrizers.Parametrizer
 import filters.image.concrete.FlipImageFilter
 import models.pixel.Pixel
 import utilities.Axes
 
 import scala.reflect.ClassTag
-import scala.util.Try
+import scala.util.{Failure, Try}
 
 final case class FlipImageFilterParametrizer[T <: Pixel: ClassTag]()
     extends Parametrizer[Try[FlipImageFilter[T]]] {
@@ -16,8 +16,8 @@ final case class FlipImageFilterParametrizer[T <: Pixel: ClassTag]()
         case "x" => Axes.X
         case "y" => Axes.Y
         case _ =>
-          throw new IllegalArgumentException(
-            "Unknown axis for flipping: acceptable values are 'x' or 'y'")
+          return Failure(new IllegalArgumentException(
+            "Unknown axis for flipping: acceptable values are 'x' or 'y'"))
       }
 
       FlipImageFilter[T](axis)

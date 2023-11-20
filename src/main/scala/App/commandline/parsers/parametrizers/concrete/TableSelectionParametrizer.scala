@@ -1,11 +1,11 @@
-package App.commandline.parsers.parametrizer.concrete
+package App.commandline.parsers.parametrizers.concrete
 
-import App.commandline.parsers.parametrizer.Parametrizer
+import App.commandline.parsers.parametrizers.Parametrizer
 import models.asciitable.ASCIITable
 import registries.Registry
 import registries.models.asciitable.ASCIITableRegistry
 
-import scala.util.Try
+import scala.util.{Failure, Try}
 
 final case class TableSelectionParametrizer(
   registry: Registry[String, ASCIITable] = ASCIITableRegistry)
@@ -17,8 +17,8 @@ final case class TableSelectionParametrizer(
       tableOption match {
         case Some(table) => table
         case None =>
-          throw new IllegalArgumentException(
-            s"Unknown ASCII conversion table: acceptable values are ${registry.list()}")
+          return Failure(new IllegalArgumentException(
+            s"Unknown ASCII conversion table: acceptable values are ${registry.list()}"))
       }
     }
 }
