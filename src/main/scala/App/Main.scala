@@ -89,5 +89,4 @@ object Main extends App {
 }
 
 //TODO: - refactoring
-// \- returning Failure instead of throwing
 //TODO: - comments
