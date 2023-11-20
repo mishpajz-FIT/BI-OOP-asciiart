@@ -88,5 +88,6 @@ object Main extends App {
   }
 }
 
-//TODO: - refactoring
+//TODO: - refactoring (image importers to also return try instead of option)
+//TODO: - E2E testing
 //TODO: - comments
