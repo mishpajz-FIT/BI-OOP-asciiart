@@ -1,19 +1,41 @@
 package registries.importers.image
 
 import importers.image.FileImageImporter
+import importers.image.inputstream.{JPEGFileImageImporter, PNGFileImageImporter}
 import models.image.Image
 import models.pixel.RGBAPixel
 import org.scalatest.{FlatSpec, Matchers}
 
 import java.io.File
+import java.nio.file.Paths
 
 class FileImageImporterRegistrySpecs extends FlatSpec with Matchers {
   behavior of "FileImageImporterRegistry"
 
-  private class MockImporter(override val file: File)
-      extends FileImageImporter {
+  class MockImporter(override val file: File) extends FileImageImporter {
     override def retrieve(): Option[Image[RGBAPixel]] =
       throw new NotImplementedError("mock importer")
+  }
+
+  it should "retrieve preregistered importers correctly" in {
+    val testImageUri = getClass.getResource("/small-img3.jpeg").toURI
+    val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
+    val imageFile = new File(testImagePath)
+
+    val png = FileImageImporterRegistry.get("png")
+    png.isDefined shouldBe true
+    png.get(imageFile) shouldBe a[PNGFileImageImporter]
+
+    val jpg = FileImageImporterRegistry.get("jpg")
+    jpg.isDefined shouldBe true
+    jpg.get(imageFile) shouldBe a[JPEGFileImageImporter]
+
+    val jpeg = FileImageImporterRegistry.get("jpeg")
+    jpeg.isDefined shouldBe true
+    jpeg.get(imageFile) shouldBe a[JPEGFileImageImporter]
+
+    FileImageImporterRegistry
+      .list() should contain theSameElementsAs Seq("png", "jpg", "jpeg")
   }
 
   it should "register and retrieve importers correctly" in {

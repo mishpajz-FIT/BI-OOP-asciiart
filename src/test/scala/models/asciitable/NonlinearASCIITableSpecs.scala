@@ -28,7 +28,7 @@ class NonlinearASCIITableSpecs extends FlatSpec with Matchers {
   }
 
   it should "return empty character for empty table" in {
-    val emptyTable = new LinearASCIITable("")
+    val emptyTable = new NonlinearASCIITable(SortedMap.empty[Int, Char])
     emptyTable.characterFor(-1) shouldBe ' '
     emptyTable.characterFor(100) shouldBe ' '
     emptyTable.characterFor(300) shouldBe ' '
