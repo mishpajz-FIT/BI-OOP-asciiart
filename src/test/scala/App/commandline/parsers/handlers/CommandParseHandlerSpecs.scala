@@ -20,6 +20,18 @@ class CommandParseHandlerSpecs extends FlatSpec with Matchers {
     item shouldBe "yay"
   }
 
+  it should "return item for correct command in Array args" in {
+    val args = Array("--testCommand")
+
+    val result = handler.handle(args)
+
+    result.isDefined shouldBe true
+    val (remainingArgs, item) = result.get
+
+    remainingArgs.isEmpty shouldBe true
+    item shouldBe "yay"
+  }
+
   it should "return item and remaining arguments for correct command in args" in {
     val args = Seq("--testCommand", "--wrong")
 

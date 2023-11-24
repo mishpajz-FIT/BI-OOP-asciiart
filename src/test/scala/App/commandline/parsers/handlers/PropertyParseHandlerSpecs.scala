@@ -22,6 +22,18 @@ class PropertyParseHandlerSpecs extends FlatSpec with Matchers {
     item shouldBe "yay: hello"
   }
 
+  it should "return item for correct command and property in Array args" in {
+    val args = Array("--testProperty", "hello")
+
+    val result = handler.handle(args)
+
+    result.isDefined shouldBe true
+    val (remainingArgs, item) = result.get
+
+    remainingArgs.isEmpty shouldBe true
+    item shouldBe "yay: hello"
+  }
+
   it should "return None for correct command but missing property in args" in {
     val args = Seq("--testProperty")
 
