@@ -42,7 +42,7 @@ class RandomImageImporter(
     bufferedImage
   }
 
-  override def retrieve(): Option[Image[RGBAPixel]] =
+  override def retrieve(): Try[Image[RGBAPixel]] =
     createFrom(createRandomImage())
 }
 

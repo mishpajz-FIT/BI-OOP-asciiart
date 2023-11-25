@@ -6,17 +6,19 @@ import models.pixel.RGBAPixel
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito.mock
 import org.mockito.MockitoSugar.when
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{FlatSpec, Matchers}
 
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.IOException
 import javax.imageio.stream.ImageInputStream
+import scala.util.Success
 
 class InputStreamImageImporterSpecs extends FlatSpec with Matchers {
   behavior of "InputStreamImageImporter"
 
-  it should "return None if reading throws" in {
+  it should "fail if reading throws" in {
 
     trait TestImageIOReadWrapper extends ImageIOReadWrapper {
       override def ioRead(inputStream: ImageInputStream): BufferedImage =
@@ -29,7 +31,8 @@ class InputStreamImageImporterSpecs extends FlatSpec with Matchers {
     with TestImageIOReadWrapper
     val result = streamImporter.retrieve()
 
-    result.isEmpty shouldBe true
+    result.isFailure shouldBe true
+    result.failure.exception.getMessage contains "mocked exception"
   }
 
   it should "return None if BufferedImage is null" in {
@@ -45,7 +48,8 @@ class InputStreamImageImporterSpecs extends FlatSpec with Matchers {
     with TestImageIOReadWrapper
     val result = streamImporter.retrieve()
 
-    result.isEmpty shouldBe true
+    result.isFailure shouldBe true
+    result.failure.exception.getMessage contains "mocked exception"
   }
 
   it should "return Image[RGBAPixel] when provided with correct stream" in {
@@ -65,9 +69,9 @@ class InputStreamImageImporterSpecs extends FlatSpec with Matchers {
     val importer = new InputStreamImageImporter(inputStreamMock)
     with TestImageIOReadWrapper
     val image = importer.retrieve() match {
-      case Some(value: Image[RGBAPixel]) => value
-      case Some(_)                       => fail("Image has incorrect pixel format")
-      case None                          => fail("Image was not imported")
+      case Success(value: Image[RGBAPixel]) => value
+      case Success(_)                       => fail("Image has incorrect pixel format")
+      case _                                => fail("Image was not imported")
     }
 
     image.height shouldBe 2

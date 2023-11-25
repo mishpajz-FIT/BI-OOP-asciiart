@@ -15,11 +15,11 @@ class InputStreamImageImporter(inputStream: ImageInputStream)
     extends BufferedImageImporter
     with ImageIOReadWrapper {
 
-  private def readFromStream(): Option[Image[RGBAPixel]] =
+  private def readFromStream(): Try[Image[RGBAPixel]] =
     Try {
       val bufferedImage: BufferedImage = ioRead(inputStream)
       createFrom(bufferedImage)
-    }.toOption.flatten
+    }.flatten
 
-  override def retrieve(): Option[Image[RGBAPixel]] = readFromStream()
+  override def retrieve(): Try[Image[RGBAPixel]] = readFromStream()
 }

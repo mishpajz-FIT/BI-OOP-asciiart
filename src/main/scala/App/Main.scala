@@ -34,7 +34,7 @@ object Main extends App {
       PropertyParseHandler(
         "--image",
         (path: String) => FileImageImporter(path)),
-      CommandParseHandler("--image-random", () => RandomImageImporter())
+      CommandParseHandler("--image-random", () => RandomImageImporter(300, 300))
     ))
 
   private val tableParser = new Parser[Try[ASCIITable]](

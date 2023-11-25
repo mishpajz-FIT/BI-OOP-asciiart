@@ -11,7 +11,7 @@ import scala.util.Try
 trait BufferedImageImporter extends ImageImporter[RGBAPixel] {
 
   protected def createFrom(
-    bufferedImage: BufferedImage): Option[Image[RGBAPixel]] =
+    bufferedImage: BufferedImage): Try[Image[RGBAPixel]] =
     Try {
       val width = bufferedImage.getWidth()
       val height = bufferedImage.getHeight()
@@ -36,5 +36,5 @@ trait BufferedImageImporter extends ImageImporter[RGBAPixel] {
       val pixels = ArrayUtilities.wrap2DArray(pixelsArray)
 
       Image(pixels)
-    }.flatten.toOption
+    }.flatten
 }

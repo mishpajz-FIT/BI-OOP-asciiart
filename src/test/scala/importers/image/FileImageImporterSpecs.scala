@@ -9,6 +9,7 @@ import registries.Registry
 
 import java.io.File
 import java.nio.file.Paths
+import scala.util.{Failure, Success}
 
 class FileImageImporterSpecs extends FlatSpec with Matchers {
   behavior of "FileImageImporter"
@@ -32,9 +33,9 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
         .getOrElse(fail("Image importer was not created"))
 
     val image = importer.retrieve() match {
-      case Some(value: Image[RGBAPixel]) => value
-      case Some(_)                       => fail("Image has incorrect pixel format")
-      case None                          => fail("Image was not imported")
+      case Success(value: Image[RGBAPixel]) => value
+      case Success(_)                       => fail("Image has incorrect pixel format")
+      case _                                => fail("Image was not imported")
     }
 
     image.height shouldBe 1
@@ -57,9 +58,9 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
         .getOrElse(fail("Image importer was not created"))
 
     val image = importer.retrieve() match {
-      case Some(value: Image[RGBAPixel]) => value
-      case Some(_)                       => fail("Image has incorrect pixel format")
-      case None                          => fail("Image was not imported")
+      case Success(value: Image[RGBAPixel]) => value
+      case Success(_)                       => fail("Image has incorrect pixel format")
+      case _                                => fail("Image was not imported")
     }
 
     image.height shouldBe 4
@@ -84,9 +85,9 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
         .getOrElse(fail("Image importer was not created"))
 
     val image = importer.retrieve() match {
-      case Some(value: Image[RGBAPixel]) => value
-      case Some(_)                       => fail("Imported image has incorrect pixel format")
-      case None                          => fail("Image was not imported")
+      case Success(value: Image[RGBAPixel]) => value
+      case Success(_)                       => fail("Imported image has incorrect pixel format")
+      case _                                => fail("Image was not imported")
     }
 
     image.height shouldBe 2
@@ -107,9 +108,9 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
         .getOrElse(fail("Image importer was not created"))
 
     val image = importer.retrieve() match {
-      case Some(value: Image[RGBAPixel]) => value
-      case Some(_)                       => fail("Imported image has incorrect pixel format")
-      case None                          => fail("Image was not imported")
+      case Success(value: Image[RGBAPixel]) => value
+      case Success(_)                       => fail("Imported image has incorrect pixel format")
+      case _                                => fail("Image was not imported")
     }
 
     image.height shouldBe 5000
@@ -154,7 +155,7 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
       "is not usable file or doesn't exist")
   }
 
-  it should "return None when provided with empty image with registered PNGFileImageImporter importer" in {
+  it should "fail when provided with empty image with registered PNGFileImageImporter importer" in {
     val emptyImage = File.createTempFile("empty_img", ".png")
     emptyImage.deleteOnExit()
 
@@ -164,6 +165,7 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
 
     val image = importer.retrieve()
 
-    image.isEmpty shouldBe true
+    image.isFailure shouldBe true
+    image.failure.exception.getMessage contains "test"
   }
 }

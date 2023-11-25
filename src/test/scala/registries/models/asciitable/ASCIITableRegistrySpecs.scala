@@ -1,6 +1,6 @@
 package registries.models.asciitable
 
-import models.asciitable.LinearASCIITable
+import models.asciitable.{ASCIITable, LinearASCIITable}
 import org.scalatest.{FlatSpec, Matchers}
 
 class ASCIITableRegistrySpecs extends FlatSpec with Matchers {
@@ -39,5 +39,11 @@ class ASCIITableRegistrySpecs extends FlatSpec with Matchers {
     ASCIITableRegistry.unregister("test")
 
     ASCIITableRegistry.get("test").isDefined shouldBe false
+  }
+
+  it should "return some default table when getDefault" in {
+    val table = ASCIITableRegistry.getDefault()
+
+    table shouldBe a[ASCIITable]
   }
 }
