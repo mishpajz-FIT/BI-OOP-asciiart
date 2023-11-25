@@ -1,6 +1,5 @@
 package App.commandline.parsers.handlers
 
-import App.commandline.parsers.handlers.CommandParseHandler
 import org.scalatest.{FlatSpec, Matchers}
 
 class CommandParseHandlerSpecs extends FlatSpec with Matchers {

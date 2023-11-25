@@ -2,11 +2,7 @@ package utilities
 
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{FlatSpec, Matchers}
-import utilities.SeqUtilities.{
-  SeqTryExtensions,
-  validateNonEmpty,
-  validateSingle
-}
+import utilities.SeqUtilities.{SeqTryExtensions, validateMaxSize, validateNonEmpty}
 
 import scala.util.{Failure, Success, Try}
 
@@ -57,26 +53,34 @@ class SeqUtilitiesSpecs extends FlatSpec with Matchers {
 
   behavior of "SeqUtilities"
 
-  it should "return Success for empty sequence with validateSingle" in {
+  it should "return Success for empty sequence with validateMaxSize" in {
     val items = Seq.empty[Int]
 
-    val result = validateSingle(items, "theItem")
+    val result = validateMaxSize(items, 1, "theItem")
 
     result.isSuccess shouldBe true
   }
 
-  it should "return Success for sequence with one item with validateSingle" in {
+  it should "return Success for sequence with item count less than parameter with validateMaxSize" in {
     val items = Seq("hello")
 
-    val result = validateSingle(items, "theItem")
+    val result = validateMaxSize(items, 2, "theItem")
 
     result.isSuccess shouldBe true
   }
 
-  it should "fail for sequence with multiple items with validateSingle" in {
+  it should "return Success for sequence with item count equal to parameter with validateMaxSize" in {
+    val items = Seq("hello", "world")
+
+    val result = validateMaxSize(items, 2, "theItem")
+
+    result.isSuccess shouldBe true
+  }
+
+  it should "fail for sequence with item count larger than parameter with validateMaxSize" in {
     val items = Seq("hello", "there")
 
-    val result = validateSingle(items, "theItem")
+    val result = validateMaxSize(items, 1, "theItem")
 
     result.isFailure shouldBe true
     result.failure.exception.getMessage contains "single theItem is allowed"

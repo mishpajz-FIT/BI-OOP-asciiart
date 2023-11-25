@@ -1,11 +1,9 @@
 package importers.image.inputstream
 
-import importers.image.ImageImporter
 import importers.image.buffered.BufferedImageImporter
 import importers.image.inputstream.wrappers.ImageIOReadWrapper
 import models.image.Image
 import models.pixel.RGBAPixel
-import utilities.ArrayUtilities
 
 import java.awt.image.BufferedImage
 import javax.imageio.stream.ImageInputStream

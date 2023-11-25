@@ -6,8 +6,8 @@ import registries.importers.image.FileImageImporterRegistry
 import utilities.FileUtilities.FileExtensions
 
 import java.io.File
-import scala.util.{Failure, Try}
 import scala.util.control.NonFatal
+import scala.util.{Failure, Try}
 
 trait FileImageImporter extends ImageImporter[RGBAPixel] {
   val file: File

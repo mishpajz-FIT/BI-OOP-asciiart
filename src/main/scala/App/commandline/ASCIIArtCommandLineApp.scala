@@ -1,29 +1,70 @@
 package App.commandline
 
+import App.ASCIIArtFacade
 import App.commandline.parsers.Parser
-import exporters.images.ImageExporter
+import App.commandline.parsers.handlers.{CommandParseHandler, PropertyParseHandler}
+import App.commandline.parsers.parametrizers.concrete.{BrightenImageFilterParametrizer, FlipImageFilterParametrizer, ScaleImageFilterParametrizer, TableSelectionParametrizer}
+import exporters.images.asciiimage.text.{FileASCIIImageExporter, StdASCIIImageExporter}
+import exporters.images.{CompoundedImageExporter, ImageExporter}
 import filters.image.ImageFilter
-import importers.image.ImageImporter
-import models.asciitable.ASCIITable
+import filters.image.concrete.{CompoundedImageFilter, InverseImageFilter}
+import importers.image.random.RandomImageImporter
+import importers.image.{FileImageImporter, ImageImporter}
+import models.asciitable.{ASCIITable, LinearASCIITable}
 import models.pixel.{ASCIIPixel, GrayscalePixel, RGBAPixel}
 import registries.models.asciitable.ASCIITableRegistry
-import transformers.image.concrete.{
-  ASCIIImageTransformer,
-  GrayscaleImageTransformer
-}
-import utilities.SeqUtilities.{
-  SeqTryExtensions,
-  validateNonEmpty,
-  validateSingle
-}
+import transformers.image.concrete.{ASCIIImageTransformer, GrayscaleImageTransformer}
+import utilities.SeqUtilities.{SeqTryExtensions, validateMaxSize, validateNonEmpty}
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
-class ASCIIArtCommandLineApp(
-  val importerParser: Parser[Try[ImageImporter[RGBAPixel]]],
-  val tableParser: Parser[Try[ASCIITable]],
-  val filterParser: Parser[Try[ImageFilter[GrayscalePixel]]],
-  val exporterParser: Parser[Try[ImageExporter[ASCIIPixel]]]) {
+class ASCIIArtCommandLineApp() {
+
+  private val importerParser = new Parser[Try[ImageImporter[RGBAPixel]]](
+    Seq(
+      PropertyParseHandler(
+        "--image",
+        (path: String) => FileImageImporter(path)),
+      CommandParseHandler("--image-random", () => RandomImageImporter(300, 300))
+    ))
+
+  private val tableParser = new Parser[Try[ASCIITable]](
+    Seq(
+      PropertyParseHandler(
+        "--table",
+        (name: String) => TableSelectionParametrizer().parametrize(name)),
+      PropertyParseHandler(
+        "--custom-table",
+        (table: String) =>
+          Try {
+            new LinearASCIITable(table)
+        })
+    ))
+
+  private val filterParser = new Parser[Try[ImageFilter[GrayscalePixel]]](
+    Seq(
+      PropertyParseHandler(
+        "--brighten",
+        (brightness: String) =>
+          BrightenImageFilterParametrizer().parametrize(brightness)),
+      CommandParseHandler("--inverse", () => Try(InverseImageFilter())),
+      PropertyParseHandler(
+        "--flip",
+        (axis: String) => FlipImageFilterParametrizer().parametrize(axis)),
+      PropertyParseHandler(
+        "--scale",
+        (scale: String) => ScaleImageFilterParametrizer().parametrize(scale))
+    ))
+
+  private val exporterParser = new Parser[Try[ImageExporter[ASCIIPixel]]](
+    Seq(
+      PropertyParseHandler(
+        "--output-file",
+        (path: String) => Try(FileASCIIImageExporter(path))),
+      CommandParseHandler(
+        "--output-console",
+        () => Try(new StdASCIIImageExporter()))
+    ))
 
   def run(args: Seq[String]): Try[Unit] =
     for {
@@ -34,28 +75,18 @@ class ASCIIArtCommandLineApp(
 
       _ <- validateNonEmpty(importers, "importer")
       _ <- validateNonEmpty(exporters, "exporter")
-      _ <- validateSingle(importers, "importer")
-      _ <- validateSingle(tables, "table")
+      _ <- validateMaxSize(importers, 1, "importer")
+      _ <- validateMaxSize(tables, 1, "table")
 
-      importedImage <- importers.head.retrieve() match {
-        case Some(image) => Success(image)
-        case None =>
-          Failure(new NoSuchElementException("Image could not be imported"))
-      }
-      grayscaleImage = GrayscaleImageTransformer().transform(importedImage)
+      table = tables.headOption.getOrElse(ASCIITableRegistry.getDefault())
 
-      filteredImage = filters.foldLeft(grayscaleImage) { (image, filter) =>
-        filter.transform(image)
-      }
-
-      table = tables.headOption match {
-        case Some(userTable) => userTable
-        case None            => ASCIITableRegistry.getDefault()
-      }
-
-      asciiImage = ASCIIImageTransformer(table).transform(filteredImage)
-
-      _ <- exporters.map(exporter => exporter.export(asciiImage)).sequence
-    } yield Success()
-
+      appFacade = new ASCIIArtFacade(
+        importers.head,
+        CompoundedImageFilter(filters),
+        CompoundedImageExporter(exporters),
+        GrayscaleImageTransformer(),
+        ASCIIImageTransformer(table)
+      )
+      _ <- appFacade.run()
+    } yield ()
 }

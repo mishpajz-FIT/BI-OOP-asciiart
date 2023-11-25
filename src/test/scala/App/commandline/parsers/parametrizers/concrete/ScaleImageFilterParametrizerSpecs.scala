@@ -5,7 +5,6 @@ import models.pixel.Pixel
 import models.pixel.visitor.PixelVisitor
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{FlatSpec, Matchers}
-import utilities.Axes
 
 class ScaleImageFilterParametrizerSpecs extends FlatSpec with Matchers {
   behavior of "ScaleImageFilterParametrizer"

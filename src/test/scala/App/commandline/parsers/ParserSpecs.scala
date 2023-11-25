@@ -1,6 +1,5 @@
 package App.commandline.parsers
 
-import App.commandline.parsers.Parser
 import App.commandline.parsers.handlers.ParseHandler
 import org.mockito.MockitoSugar.{mock, when}
 import org.scalatest.{FlatSpec, Matchers}

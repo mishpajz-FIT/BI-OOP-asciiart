@@ -9,7 +9,7 @@ import registries.Registry
 
 import java.io.File
 import java.nio.file.Paths
-import scala.util.{Failure, Success}
+import scala.util.Success
 
 class FileImageImporterSpecs extends FlatSpec with Matchers {
   behavior of "FileImageImporter"

@@ -1,6 +1,5 @@
 package App.commandline.parsers.handlers
 
-import App.commandline.parsers.handlers.PropertyParseHandler
 import org.scalatest.{FlatSpec, Matchers}
 
 class PropertyParseHandlerSpecs extends FlatSpec with Matchers {

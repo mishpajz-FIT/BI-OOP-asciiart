@@ -2,6 +2,6 @@ package exporters
 
 import scala.util.Try
 
-trait Exporter[T] {
+trait Exporter[-T] {
   def export(item: T): Try[Unit]
 }

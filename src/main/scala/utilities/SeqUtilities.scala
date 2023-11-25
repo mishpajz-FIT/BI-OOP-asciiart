@@ -15,8 +15,8 @@ object SeqUtilities {
       }
   }
 
-  def validateSingle[T](items: Seq[T], name: String): Try[Unit] = {
-    if (items.length > 1)
+  def validateMaxSize[T](items: Seq[T], size: Int, name: String): Try[Unit] = {
+    if (items.length > size)
       return Failure(
         new IllegalArgumentException(s"Only single $name is allowed"))
     Success()
