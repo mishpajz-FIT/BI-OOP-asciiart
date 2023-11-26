@@ -49,7 +49,6 @@ class InputStreamImageImporterSpecs extends FlatSpec with Matchers {
     val result = streamImporter.retrieve()
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "mocked exception"
   }
 
   it should "return Image[RGBAPixel] when provided with correct stream" in {
