@@ -95,7 +95,8 @@ class ASCIIArtCommandLineAppSpecs
     val result = app.run(Array("missing importer"))
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "At least one importer is required"
+    result.failure.exception.getMessage should include(
+      "At least one importer is required")
   }
 
   it should "fail on multiple importers" in {
@@ -113,15 +114,16 @@ class ASCIIArtCommandLineAppSpecs
     val result = app.run(Array("more importers"))
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "Only single importer is allowed"
+    result.failure.exception.getMessage should include(
+      "Only single importer is allowed")
   }
 
   it should "fail on missing exporter" in {
     setupCommonMocks()
 
     reset(mockExporterParser)
-    when(mockImporterParser.parse(any[Seq[String]]))
-      .thenReturn(Seq.empty[Try[ImageImporter[RGBAPixel]]])
+    when(mockExporterParser.parse(any[Seq[String]]))
+      .thenReturn(Seq.empty[Try[ImageExporter[ASCIIPixel]]])
 
     val app = new ASCIIArtCommandLineApp(
       mockImporterParser,
@@ -131,7 +133,8 @@ class ASCIIArtCommandLineAppSpecs
     val result = app.run(Array("missing exporter"))
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "At least one importer is required"
+    result.failure.exception.getMessage should include(
+      "At least one exporter is required")
   }
 
   it should "fail on multiple tables" in {
@@ -149,7 +152,8 @@ class ASCIIArtCommandLineAppSpecs
     val result = app.run(Array("more tables"))
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "Only single table is allowed"
+    result.failure.exception.getMessage should include(
+      "Only single table is allowed")
   }
 
   it should "fail on importer failure" in {
@@ -167,7 +171,7 @@ class ASCIIArtCommandLineAppSpecs
     val result = app.run(Array("retrieval fail"))
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "mock exception"
+    result.failure.exception.getMessage should include("mock exception")
   }
 
   it should "fail on exporter failure" in {
@@ -185,7 +189,7 @@ class ASCIIArtCommandLineAppSpecs
     val result = app.run(Array("export fail"))
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "mock exception"
+    result.failure.exception.getMessage should include("mock exception")
   }
 
   it should "use default table when no table was supplied" in {

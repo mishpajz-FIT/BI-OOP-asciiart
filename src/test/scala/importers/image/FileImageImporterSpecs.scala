@@ -25,7 +25,8 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
   val isCI: Boolean = sys.env.getOrElse("CI", "false").toBoolean
 
   it should "return Image[RGBAPixel] when provided with JPEG image with registered JPEGFileImageImporter importer" in {
-    val testImageUri = getClass.getResource("/small-img3.jpeg").toURI
+    val testImageUri =
+      getClass.getClassLoader.getResource("test/small-img3.jpeg").toURI
     val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
     val importer =
@@ -50,7 +51,8 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
   }
 
   it should "return Image[RGBAPixel] when provided with PNG image with registered PNGFileImageImporter importer" in {
-    val testImageUri = getClass.getResource("/small-img1.png").toURI
+    val testImageUri =
+      getClass.getClassLoader.getResource("test/small-img1.png").toURI
     val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
     val importer =
@@ -77,7 +79,8 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
   }
 
   it should "return Image[RGBAPixel] when provided with transparent PNG image with registered PNGFileImageImporter importer" in {
-    val testImageUri = getClass.getResource("/small-img2.png").toURI
+    val testImageUri =
+      getClass.getClassLoader.getResource("test/small-img2.png").toURI
     val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
     val importer =
@@ -100,7 +103,8 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
   it should "return Image[RGBAPixel] when provided with large JPG image with registered JPEGFileImageImporter importer" in {
     assume(!isCI) // image is too big for CI runner, therefore ignored there
 
-    val testImageUri = getClass.getResource("/large-img1.jpg").toURI
+    val testImageUri =
+      getClass.getClassLoader.getResource("test/large-img1.jpg").toURI
     val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
     val importer =
@@ -118,7 +122,8 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
   }
 
   it should "fail with IllegalArgumentException if when unregistered image format (BMP) is provided" in {
-    val testImageUri = getClass.getResource("/unsupported_format.bmp").toURI
+    val testImageUri =
+      getClass.getClassLoader.getResource("test/unsupported_format.bmp").toURI
     val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
     val result = FileImageImporter(testImagePath, mockRegistry)
@@ -129,7 +134,8 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
   }
 
   it should "fail with IllegalArgumentException if the file is directory" in {
-    val testImageUri = getClass.getResource("/directory1").toURI
+    val testImageUri =
+      getClass.getClassLoader.getResource("test/directory1").toURI
     val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
 
     val result = FileImageImporter(testImagePath, mockRegistry)

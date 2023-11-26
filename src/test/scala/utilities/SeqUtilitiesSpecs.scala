@@ -27,7 +27,7 @@ class SeqUtilitiesSpecs extends FlatSpec with Matchers {
     val result = seq.sequence
 
     result.isSuccess shouldBe false
-    result.failure.exception.getMessage contains "mock exception"
+    result.failure.exception.getMessage should include("mock exception")
   }
 
   it should "handle an empty sequence correctly" in {
@@ -48,7 +48,7 @@ class SeqUtilitiesSpecs extends FlatSpec with Matchers {
     val result = seq.sequence
 
     result.isSuccess shouldBe false
-    result.failure.exception.getMessage contains "mock exception 1"
+    result.failure.exception.getMessage should include("mock exception 1")
   }
 
   behavior of "SeqUtilities"
@@ -83,7 +83,8 @@ class SeqUtilitiesSpecs extends FlatSpec with Matchers {
     val result = validateMaxSize(items, 1, "theItem")
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "single theItem is allowed"
+    result.failure.exception.getMessage should include(
+      "single theItem is allowed")
   }
 
   it should "return Failure for empty sequence with validateNonEmpty" in {
@@ -92,7 +93,8 @@ class SeqUtilitiesSpecs extends FlatSpec with Matchers {
     val result = validateNonEmpty(items, "theItem")
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "one theItem is required"
+    result.failure.exception.getMessage should include(
+      "one theItem is required")
   }
 
   it should "return Success for sequence with one item with validateNonEmpty" in {

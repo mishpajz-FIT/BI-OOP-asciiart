@@ -32,7 +32,7 @@ class InputStreamImageImporterSpecs extends FlatSpec with Matchers {
     val result = streamImporter.retrieve()
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "mocked exception"
+    result.failure.exception.getMessage should include("mocked exception")
   }
 
   it should "fail if BufferedImage is null" in {

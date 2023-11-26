@@ -62,7 +62,7 @@ class CompoundedImageExporterSpecs extends FlatSpec with Matchers {
     val result = exporter.export(mock[Image[Pixel]])
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "mock exception"
+    result.failure.exception.getMessage should include("mock exception")
   }
 
   it should "succeed and do nothing with empty sequence of exporters" in {

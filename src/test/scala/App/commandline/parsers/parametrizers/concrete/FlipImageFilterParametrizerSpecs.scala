@@ -49,7 +49,8 @@ class FlipImageFilterParametrizerSpecs extends FlatSpec with Matchers {
 
     result.isFailure shouldBe true
     result.failure.exception shouldBe a[IllegalArgumentException]
-    result.failure.exception.getMessage contains "Unknown axis for flipping"
+    result.failure.exception.getMessage should include(
+      "Unknown axis for flipping")
   }
 
   it should "handle empty string" in {
@@ -57,6 +58,7 @@ class FlipImageFilterParametrizerSpecs extends FlatSpec with Matchers {
 
     result.isFailure shouldBe true
     result.failure.exception shouldBe a[IllegalArgumentException]
-    result.failure.exception.getMessage contains "Unknown axis for flipping"
+    result.failure.exception.getMessage should include(
+      "Unknown axis for flipping")
   }
 }

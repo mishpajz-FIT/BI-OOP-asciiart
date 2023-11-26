@@ -2,21 +2,10 @@ package App
 
 import App.commandline.ASCIIArtCommandLineApp
 import App.commandline.parsers.Parser
-import App.commandline.parsers.handlers.{
-  CommandParseHandler,
-  PropertyParseHandler
-}
-import App.commandline.parsers.parametrizers.concrete.{
-  BrightenImageFilterParametrizer,
-  FlipImageFilterParametrizer,
-  ScaleImageFilterParametrizer,
-  TableSelectionParametrizer
-}
+import App.commandline.parsers.handlers.{CommandParseHandler, PropertyParseHandler}
+import App.commandline.parsers.parametrizers.concrete.{BrightenImageFilterParametrizer, FlipImageFilterParametrizer, ScaleImageFilterParametrizer, TableSelectionParametrizer}
 import exporters.images.ImageExporter
-import exporters.images.asciiimage.text.{
-  FileASCIIImageExporter,
-  StdASCIIImageExporter
-}
+import exporters.images.asciiimage.text.{FileASCIIImageExporter, StdASCIIImageExporter}
 import filters.image.ImageFilter
 import filters.image.concrete.InverseImageFilter
 import importers.image.random.RandomImageImporter
@@ -53,10 +42,10 @@ object Main extends App {
   private val filterParser = new Parser[Try[ImageFilter[GrayscalePixel]]](
     Seq(
       PropertyParseHandler(
-        "--brighten",
+        "--brightness",
         (brightness: String) =>
           BrightenImageFilterParametrizer().parametrize(brightness)),
-      CommandParseHandler("--inverse", () => Try(InverseImageFilter())),
+      CommandParseHandler("--invert", () => Try(InverseImageFilter())),
       PropertyParseHandler(
         "--flip",
         (axis: String) => FlipImageFilterParametrizer().parametrize(axis)),
@@ -81,12 +70,13 @@ object Main extends App {
       filterParser,
       exporterParser,
       tableParser)
+
   app.run(args) match {
-    case Success(_)                   => println("ASCIIArt by Michal Dobes")
-    case Failure(NonFatal(exception)) => println(exception.getMessage)
-    case Failure(exception)           => throw exception
+    case Success(_) => System.out.println("ASCIIArt by Michal Dobes")
+    case Failure(NonFatal(exception)) =>
+      System.out.println(s"Error: ${exception.getMessage}")
+    case Failure(exception) => throw exception
   }
 }
 
-//TODO: - E2E testing
 //TODO: - comments

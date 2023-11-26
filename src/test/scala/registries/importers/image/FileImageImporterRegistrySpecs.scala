@@ -19,7 +19,8 @@ class FileImageImporterRegistrySpecs extends FlatSpec with Matchers {
   }
 
   it should "retrieve preregistered importers correctly" in {
-    val testImageUri = getClass.getResource("/small-img3.jpeg").toURI
+    val testImageUri =
+      getClass.getClassLoader.getResource("test/small-img3.jpeg").toURI
     val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
     val imageFile = new File(testImagePath)
 

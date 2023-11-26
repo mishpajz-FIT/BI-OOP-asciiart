@@ -73,7 +73,7 @@ class ASCIIArtFacadeSpecs extends FlatSpec with Matchers {
     val result = facade.run()
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "mock exception 1"
+    result.failure.exception.getMessage should include("mock exception 1")
   }
 
   it should "fail when exporter fails" in {
@@ -93,6 +93,6 @@ class ASCIIArtFacadeSpecs extends FlatSpec with Matchers {
     val result = facade.run()
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "mock exception 2"
+    result.failure.exception.getMessage should include("mock exception 2")
   }
 }

@@ -42,7 +42,8 @@ class ScaleImageFilterParametrizerSpecs extends FlatSpec with Matchers {
 
     result.isFailure shouldBe true
     result.failure.exception shouldBe a[IllegalArgumentException]
-    result.failure.exception.getMessage contains "Unknown scale for scaling"
+    result.failure.exception.getMessage should include(
+      "Unknown scale for scaling")
   }
 
   it should "handle empty string" in {
@@ -50,6 +51,7 @@ class ScaleImageFilterParametrizerSpecs extends FlatSpec with Matchers {
 
     result.isFailure shouldBe true
     result.failure.exception shouldBe a[IllegalArgumentException]
-    result.failure.exception.getMessage contains "Unknown scale for scaling"
+    result.failure.exception.getMessage should include(
+      "Unknown scale for scaling")
   }
 }

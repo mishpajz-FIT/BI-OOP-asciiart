@@ -23,6 +23,7 @@ class ASCIITableRegistrySpecs extends FlatSpec with Matchers {
 
     namesSet shouldNot contain("test")
     namesSet should contain("bourke")
+    namesSet should contain("grayramp")
   }
 
   it should "when retrieving table return None for unregistered table" in {

@@ -30,7 +30,8 @@ class TableSelectionParametrizerSpecs extends FlatSpec with Matchers {
 
     result.isSuccess shouldBe false
     result.failure.exception shouldBe a[IllegalArgumentException]
-    result.failure.exception.getMessage contains "Unknown ASCII conversion table"
+    result.failure.exception.getMessage should include(
+      "Unknown ASCII conversion table")
 
   }
 
@@ -42,7 +43,8 @@ class TableSelectionParametrizerSpecs extends FlatSpec with Matchers {
 
     result.isSuccess shouldBe false
     result.failure.exception shouldBe a[IllegalArgumentException]
-    result.failure.exception.getMessage contains "Unknown ASCII conversion table"
+    result.failure.exception.getMessage should include(
+      "Unknown ASCII conversion table")
   }
 
   it should "handle empty name" in {
@@ -54,6 +56,7 @@ class TableSelectionParametrizerSpecs extends FlatSpec with Matchers {
 
     result.isSuccess shouldBe false
     result.failure.exception shouldBe a[IllegalArgumentException]
-    result.failure.exception.getMessage contains "Unknown ASCII conversion table"
+    result.failure.exception.getMessage should include(
+      "Unknown ASCII conversion table")
   }
 }
