@@ -2,10 +2,21 @@ package App
 
 import App.commandline.ASCIIArtCommandLineApp
 import App.commandline.parsers.Parser
-import App.commandline.parsers.handlers.{CommandParseHandler, PropertyParseHandler}
-import App.commandline.parsers.parametrizers.concrete.{BrightenImageFilterParametrizer, FlipImageFilterParametrizer, ScaleImageFilterParametrizer, TableSelectionParametrizer}
+import App.commandline.parsers.handlers.{
+  CommandParseHandler,
+  PropertyParseHandler
+}
+import App.commandline.parsers.parametrizers.concrete.{
+  BrightenImageFilterParametrizer,
+  FlipImageFilterParametrizer,
+  ScaleImageFilterParametrizer,
+  TableSelectionParametrizer
+}
 import exporters.images.ImageExporter
-import exporters.images.asciiimage.text.{FileASCIIImageExporter, StdASCIIImageExporter}
+import exporters.images.asciiimage.text.{
+  FileASCIIImageExporter,
+  StdASCIIImageExporter
+}
 import filters.image.ImageFilter
 import filters.image.concrete.InverseImageFilter
 import importers.image.random.RandomImageImporter

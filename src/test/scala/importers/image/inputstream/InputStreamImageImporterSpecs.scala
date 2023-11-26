@@ -35,7 +35,7 @@ class InputStreamImageImporterSpecs extends FlatSpec with Matchers {
     result.failure.exception.getMessage contains "mocked exception"
   }
 
-  it should "return None if BufferedImage is null" in {
+  it should "fail if BufferedImage is null" in {
 
     trait TestImageIOReadWrapper extends ImageIOReadWrapper {
       override def ioRead(inputStream: ImageInputStream): BufferedImage =
