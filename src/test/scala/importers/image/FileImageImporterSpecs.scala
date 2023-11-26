@@ -166,6 +166,5 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
     val image = importer.retrieve()
 
     image.isFailure shouldBe true
-    image.failure.exception.getMessage contains "test"
   }
 }
