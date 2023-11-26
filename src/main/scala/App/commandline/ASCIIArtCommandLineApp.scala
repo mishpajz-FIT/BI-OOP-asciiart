@@ -2,15 +2,10 @@ package App.commandline
 
 import App.ASCIIArtFacade
 import App.commandline.parsers.Parser
-import App.commandline.parsers.handlers.{CommandParseHandler, PropertyParseHandler}
-import App.commandline.parsers.parametrizers.concrete.{BrightenImageFilterParametrizer, FlipImageFilterParametrizer, ScaleImageFilterParametrizer, TableSelectionParametrizer}
-import exporters.images.asciiimage.text.{FileASCIIImageExporter, StdASCIIImageExporter}
 import exporters.images.{CompoundedImageExporter, ImageExporter}
-import filters.image.ImageFilter
-import filters.image.concrete.{CompoundedImageFilter, InverseImageFilter}
-import importers.image.random.RandomImageImporter
-import importers.image.{FileImageImporter, ImageImporter}
-import models.asciitable.{ASCIITable, LinearASCIITable}
+import filters.image.{CompoundedImageFilter, ImageFilter}
+import importers.image.ImageImporter
+import models.asciitable.ASCIITable
 import models.pixel.{ASCIIPixel, GrayscalePixel, RGBAPixel}
 import registries.models.asciitable.ASCIITableRegistry
 import transformers.image.concrete.{ASCIIImageTransformer, GrayscaleImageTransformer}
@@ -18,53 +13,11 @@ import utilities.SeqUtilities.{SeqTryExtensions, validateMaxSize, validateNonEmp
 
 import scala.util.Try
 
-class ASCIIArtCommandLineApp() {
-
-  private val importerParser = new Parser[Try[ImageImporter[RGBAPixel]]](
-    Seq(
-      PropertyParseHandler(
-        "--image",
-        (path: String) => FileImageImporter(path)),
-      CommandParseHandler("--image-random", () => RandomImageImporter(300, 300))
-    ))
-
-  private val tableParser = new Parser[Try[ASCIITable]](
-    Seq(
-      PropertyParseHandler(
-        "--table",
-        (name: String) => TableSelectionParametrizer().parametrize(name)),
-      PropertyParseHandler(
-        "--custom-table",
-        (table: String) =>
-          Try {
-            new LinearASCIITable(table)
-        })
-    ))
-
-  private val filterParser = new Parser[Try[ImageFilter[GrayscalePixel]]](
-    Seq(
-      PropertyParseHandler(
-        "--brighten",
-        (brightness: String) =>
-          BrightenImageFilterParametrizer().parametrize(brightness)),
-      CommandParseHandler("--inverse", () => Try(InverseImageFilter())),
-      PropertyParseHandler(
-        "--flip",
-        (axis: String) => FlipImageFilterParametrizer().parametrize(axis)),
-      PropertyParseHandler(
-        "--scale",
-        (scale: String) => ScaleImageFilterParametrizer().parametrize(scale))
-    ))
-
-  private val exporterParser = new Parser[Try[ImageExporter[ASCIIPixel]]](
-    Seq(
-      PropertyParseHandler(
-        "--output-file",
-        (path: String) => Try(FileASCIIImageExporter(path))),
-      CommandParseHandler(
-        "--output-console",
-        () => Try(new StdASCIIImageExporter()))
-    ))
+class ASCIIArtCommandLineApp(
+  val importerParser: Parser[Try[ImageImporter[RGBAPixel]]],
+  val filterParser: Parser[Try[ImageFilter[GrayscalePixel]]],
+  val exporterParser: Parser[Try[ImageExporter[ASCIIPixel]]],
+  val tableParser: Parser[Try[ASCIITable]]) {
 
   def run(args: Seq[String]): Try[Unit] =
     for {

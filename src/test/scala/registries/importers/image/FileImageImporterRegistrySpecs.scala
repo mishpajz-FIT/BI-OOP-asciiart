@@ -8,12 +8,13 @@ import org.scalatest.{FlatSpec, Matchers}
 
 import java.io.File
 import java.nio.file.Paths
+import scala.util.Try
 
 class FileImageImporterRegistrySpecs extends FlatSpec with Matchers {
   behavior of "FileImageImporterRegistry"
 
   class MockImporter(override val file: File) extends FileImageImporter {
-    override def retrieve(): Option[Image[RGBAPixel]] =
+    override def retrieve(): Try[Image[RGBAPixel]] =
       throw new NotImplementedError("mock importer")
   }
 

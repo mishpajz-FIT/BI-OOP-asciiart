@@ -21,9 +21,9 @@ class ASCIIArtCommandLineAppSpecs
   behavior of "ASCIIArtCommandLineApp"
 
   private val mockImporterParser = mock[Parser[Try[ImageImporter[RGBAPixel]]]]
-  private val mockTableParser = mock[Parser[Try[ASCIITable]]]
   private val mockFilterParser = mock[Parser[Try[ImageFilter[GrayscalePixel]]]]
   private val mockExporterParser = mock[Parser[Try[ImageExporter[ASCIIPixel]]]]
+  private val mockTableParser = mock[Parser[Try[ASCIITable]]]
 
   private val mockImporter = mock[ImageImporter[RGBAPixel]]
   private val mockFilter = mock[ImageFilter[GrayscalePixel]]
@@ -38,9 +38,9 @@ class ASCIIArtCommandLineAppSpecs
   override def beforeEach(): Unit = {
     reset(
       mockImporterParser,
-      mockTableParser,
       mockFilterParser,
       mockExporterParser,
+      mockTableParser,
       mockImporter,
       mockFilter,
       mockExporter)
@@ -58,7 +58,7 @@ class ASCIIArtCommandLineAppSpecs
     when(mockExporterParser.parse(any[Seq[String]]))
       .thenReturn(Seq(Success(mockExporter)))
 
-    when(mockImporter.retrieve()).thenReturn(Some(testImage))
+    when(mockImporter.retrieve()).thenReturn(Success(testImage))
     when(mockFilter.transform(any[Image[GrayscalePixel]]))
       .thenReturn(testGrayscaleImage)
     when(mockExporter.export(any[Image[ASCIIPixel]])).thenReturn(Success())
@@ -69,9 +69,9 @@ class ASCIIArtCommandLineAppSpecs
 
     val app = new ASCIIArtCommandLineApp(
       mockImporterParser,
-      mockTableParser,
       mockFilterParser,
-      mockExporterParser)
+      mockExporterParser,
+      mockTableParser)
     val result = app.run(Array("valid args"))
 
     result.isSuccess shouldBe true
@@ -89,9 +89,9 @@ class ASCIIArtCommandLineAppSpecs
 
     val app = new ASCIIArtCommandLineApp(
       mockImporterParser,
-      mockTableParser,
       mockFilterParser,
-      mockExporterParser)
+      mockExporterParser,
+      mockTableParser)
     val result = app.run(Array("missing importer"))
 
     result.isFailure shouldBe true
@@ -107,9 +107,9 @@ class ASCIIArtCommandLineAppSpecs
 
     val app = new ASCIIArtCommandLineApp(
       mockImporterParser,
-      mockTableParser,
       mockFilterParser,
-      mockExporterParser)
+      mockExporterParser,
+      mockTableParser)
     val result = app.run(Array("more importers"))
 
     result.isFailure shouldBe true
@@ -125,9 +125,9 @@ class ASCIIArtCommandLineAppSpecs
 
     val app = new ASCIIArtCommandLineApp(
       mockImporterParser,
-      mockTableParser,
       mockFilterParser,
-      mockExporterParser)
+      mockExporterParser,
+      mockTableParser)
     val result = app.run(Array("missing exporter"))
 
     result.isFailure shouldBe true
@@ -143,9 +143,9 @@ class ASCIIArtCommandLineAppSpecs
 
     val app = new ASCIIArtCommandLineApp(
       mockImporterParser,
-      mockTableParser,
       mockFilterParser,
-      mockExporterParser)
+      mockExporterParser,
+      mockTableParser)
     val result = app.run(Array("more tables"))
 
     result.isFailure shouldBe true
@@ -156,30 +156,32 @@ class ASCIIArtCommandLineAppSpecs
     setupCommonMocks()
 
     reset(mockImporter)
-    when(mockImporter.retrieve()).thenReturn(None)
+    when(mockImporter.retrieve())
+      .thenReturn(Failure(new IllegalArgumentException("mock exception")))
 
     val app = new ASCIIArtCommandLineApp(
       mockImporterParser,
-      mockTableParser,
       mockFilterParser,
-      mockExporterParser)
+      mockExporterParser,
+      mockTableParser)
     val result = app.run(Array("retrieval fail"))
 
     result.isFailure shouldBe true
-    result.failure.exception.getMessage contains "Image could not be imported"
+    result.failure.exception.getMessage contains "mock exception"
   }
 
   it should "fail on exporter failure" in {
     setupCommonMocks()
 
     reset(mockExporter)
-    when(mockExporter.export(any[Image[ASCIIPixel]])).thenReturn(Failure(new IllegalArgumentException("mock exception")))
+    when(mockExporter.export(any[Image[ASCIIPixel]]))
+      .thenReturn(Failure(new IllegalArgumentException("mock exception")))
 
     val app = new ASCIIArtCommandLineApp(
       mockImporterParser,
-      mockTableParser,
       mockFilterParser,
-      mockExporterParser)
+      mockExporterParser,
+      mockTableParser)
     val result = app.run(Array("export fail"))
 
     result.isFailure shouldBe true
@@ -195,9 +197,9 @@ class ASCIIArtCommandLineAppSpecs
 
     val app = new ASCIIArtCommandLineApp(
       mockImporterParser,
-      mockTableParser,
       mockFilterParser,
-      mockExporterParser)
+      mockExporterParser,
+      mockTableParser)
     val result = app.run(Array("valid args"))
 
     result.isSuccess shouldBe true

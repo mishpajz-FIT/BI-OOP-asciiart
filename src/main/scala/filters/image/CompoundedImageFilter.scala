@@ -1,11 +1,9 @@
-package filters.image.concrete
+package filters.image
 
-import filters.image.ImageFilter
 import models.image.Image
 import models.pixel.Pixel
 
-final case class CompoundedImageFilter[T <: Pixel](
-  val filters: Seq[ImageFilter[T]])
+final case class CompoundedImageFilter[T <: Pixel](filters: Seq[ImageFilter[T]])
     extends ImageFilter[T] {
   override def transform(item: Image[T]): Image[T] =
     filters.foldLeft(item) { (image, filter) =>
