@@ -28,7 +28,7 @@ class FileASCIIImageExporterSpecs extends FlatSpec with Matchers {
 
     val image = Image(pixels).get
 
-    val exporter = new FileASCIIImageExporter(outFile)
+    val exporter = FileASCIIImageExporter(outFile.getPath)
 
     val result = exporter.export(image)
     result.isSuccess shouldBe true

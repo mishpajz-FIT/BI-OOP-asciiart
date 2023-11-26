@@ -1,16 +1,28 @@
-package App.parsers.handlers
+package App.commandline.parsers.handlers
 
 import org.scalatest.{FlatSpec, Matchers}
 
 class PropertyParseHandlerSpecs extends FlatSpec with Matchers {
   behavior of "PropertyParseHandler"
 
-  private val handler = new PropertyParseHandler(
+  private val handler = PropertyParseHandler(
     "--testProperty",
     (property: String) => s"yay: $property")
 
   it should "return item for correct command and property in args" in {
     val args = Seq("--testProperty", "hello")
+
+    val result = handler.handle(args)
+
+    result.isDefined shouldBe true
+    val (remainingArgs, item) = result.get
+
+    remainingArgs.isEmpty shouldBe true
+    item shouldBe "yay: hello"
+  }
+
+  it should "return item for correct command and property in Array args" in {
+    val args = Array("--testProperty", "hello")
 
     val result = handler.handle(args)
 

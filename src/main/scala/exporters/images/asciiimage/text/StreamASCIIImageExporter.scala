@@ -6,7 +6,7 @@ import models.pixel.ASCIIPixel
 
 import java.io.{Closeable, OutputStream, OutputStreamWriter}
 import java.nio.charset.StandardCharsets
-import scala.util.Try
+import scala.util.{Failure, Try}
 
 class StreamASCIIImageExporter(writer: OutputStreamWriter)
     extends ImageExporter[ASCIIPixel]
@@ -20,8 +20,8 @@ class StreamASCIIImageExporter(writer: OutputStreamWriter)
   protected def writeToStream(image: Image[ASCIIPixel]): Try[Unit] =
     Try {
       if (closed)
-        throw new IllegalStateException(
-          "Attempted to write to already closed stream.")
+        return Failure(new IllegalStateException(
+          "Attempted to write to already closed stream."))
 
       val height = image.height
       val width = image.width

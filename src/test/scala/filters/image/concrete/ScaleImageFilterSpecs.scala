@@ -9,15 +9,15 @@ import org.scalatest.{FlatSpec, Matchers}
 class ScaleImageFilterSpecs extends FlatSpec with Matchers {
   behavior of "ScaleImageFilter"
 
-  final private case class MockedPixel(identification: Char) extends Pixel {
+  class MockedPixel(val identification: Char) extends Pixel {
     override def accept[T](visitor: PixelVisitor[T]): T =
       throw new NotImplementedError("mock type")
   }
 
   it should "return correctly upscaled Image" in {
     val pixels = Vector(
-      Vector(MockedPixel('A'), MockedPixel('B')),
-      Vector(MockedPixel('C'), MockedPixel('D'))
+      Vector(new MockedPixel('A'), new MockedPixel('B')),
+      Vector(new MockedPixel('C'), new MockedPixel('D'))
     )
 
     val image = Image(pixels).get
@@ -53,25 +53,25 @@ class ScaleImageFilterSpecs extends FlatSpec with Matchers {
   it should "return correctly downscaled Image" in {
     val pixels = Vector(
       Vector(
-        MockedPixel('A'),
-        MockedPixel('A'),
-        MockedPixel('B'),
-        MockedPixel('B')),
+        new MockedPixel('A'),
+        new MockedPixel('A'),
+        new MockedPixel('B'),
+        new MockedPixel('B')),
       Vector(
-        MockedPixel('A'),
-        MockedPixel('A'),
-        MockedPixel('B'),
-        MockedPixel('B')),
+        new MockedPixel('A'),
+        new MockedPixel('A'),
+        new MockedPixel('B'),
+        new MockedPixel('B')),
       Vector(
-        MockedPixel('C'),
-        MockedPixel('C'),
-        MockedPixel('D'),
-        MockedPixel('D')),
+        new MockedPixel('C'),
+        new MockedPixel('C'),
+        new MockedPixel('D'),
+        new MockedPixel('D')),
       Vector(
-        MockedPixel('C'),
-        MockedPixel('C'),
-        MockedPixel('D'),
-        MockedPixel('D'))
+        new MockedPixel('C'),
+        new MockedPixel('C'),
+        new MockedPixel('D'),
+        new MockedPixel('D'))
     )
 
     val image = Image(pixels).get
@@ -91,7 +91,7 @@ class ScaleImageFilterSpecs extends FlatSpec with Matchers {
 
   it should "return correctly upscaled Image if the image has different dimensions" in {
     val pixels = Vector(
-      Vector(MockedPixel('A'), MockedPixel('B'))
+      Vector(new MockedPixel('A'), new MockedPixel('B'))
     )
 
     val image = Image(pixels).get
@@ -115,7 +115,7 @@ class ScaleImageFilterSpecs extends FlatSpec with Matchers {
 
   it should "return correctly downscaled Image if the image has smaller dimensions than scale rate" in {
     val pixels = Vector(
-      Vector(MockedPixel('A'), MockedPixel('B'), MockedPixel('C'))
+      Vector(new MockedPixel('A'), new MockedPixel('B'), new MockedPixel('C'))
     )
 
     val image = Image(pixels).get
@@ -133,7 +133,7 @@ class ScaleImageFilterSpecs extends FlatSpec with Matchers {
 
   it should "return identity of downscaled Image if downscaling isn't possible" in {
     val pixels = Vector(
-      Vector(MockedPixel('A'))
+      Vector(new MockedPixel('A'))
     )
 
     val image = Image(pixels).get
@@ -150,8 +150,8 @@ class ScaleImageFilterSpecs extends FlatSpec with Matchers {
 
   it should "return identity of Image when no scale is selected" in {
     val pixels = Vector(
-      Vector(MockedPixel('A'), MockedPixel('B')),
-      Vector(MockedPixel('C'), MockedPixel('D'))
+      Vector(new MockedPixel('A'), new MockedPixel('B')),
+      Vector(new MockedPixel('C'), new MockedPixel('D'))
     )
 
     val image = Image(pixels).get

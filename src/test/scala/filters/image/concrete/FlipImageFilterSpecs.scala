@@ -9,16 +9,16 @@ import utilities.Axes.{X, Y}
 class FlipImageFilterSpecs extends FlatSpec with Matchers {
   behavior of "FlipImageFilter"
 
-  final private case class MockedPixel(identification: Int) extends Pixel {
+  class MockedPixel(val identification: Int) extends Pixel {
     override def accept[T](visitor: PixelVisitor[T]): T =
       throw new NotImplementedError("mock type")
   }
 
   it should "return Image flipped alongside X axis" in {
     val pixels = Vector(
-      Vector(MockedPixel(1), MockedPixel(2)),
-      Vector(MockedPixel(3), MockedPixel(4)),
-      Vector(MockedPixel(5), MockedPixel(6)))
+      Vector(new MockedPixel(1), new MockedPixel(2)),
+      Vector(new MockedPixel(3), new MockedPixel(4)),
+      Vector(new MockedPixel(5), new MockedPixel(6)))
 
     val image = Image(pixels).get
 
@@ -39,8 +39,8 @@ class FlipImageFilterSpecs extends FlatSpec with Matchers {
 
   it should "return Image flipped alongside Y axis" in {
     val pixels = Vector(
-      Vector(MockedPixel(1), MockedPixel(2), MockedPixel(3)),
-      Vector(MockedPixel(4), MockedPixel(5), MockedPixel(6))
+      Vector(new MockedPixel(1), new MockedPixel(2), new MockedPixel(3)),
+      Vector(new MockedPixel(4), new MockedPixel(5), new MockedPixel(6))
     )
 
     val image = Image(pixels).get
@@ -61,7 +61,7 @@ class FlipImageFilterSpecs extends FlatSpec with Matchers {
   }
 
   it should "return unchanged Image for too small dimensions" in {
-    val pixels = Vector(Vector(MockedPixel(1)))
+    val pixels = Vector(Vector(new MockedPixel(1)))
 
     val image = Image(pixels).get
 

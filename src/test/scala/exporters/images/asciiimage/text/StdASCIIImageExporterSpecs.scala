@@ -13,7 +13,6 @@ class StdASCIIImageExporterSpecs extends FlatSpec with Matchers {
     val originalOut = System.out
 
     val replacementStream = new ByteArrayOutputStream()
-    System.setOut(new PrintStream(replacementStream))
 
     val pixels = Vector(
       Vector(
@@ -28,6 +27,7 @@ class StdASCIIImageExporterSpecs extends FlatSpec with Matchers {
 
     val image = Image(pixels).get
 
+    System.setOut(new PrintStream(replacementStream))
     val exporter = new StdASCIIImageExporter()
 
     val result = exporter.export(image)

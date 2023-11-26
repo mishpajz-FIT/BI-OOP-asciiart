@@ -1,6 +1,6 @@
-package App.parsers
+package App.commandline.parsers
 
-import App.parsers.handlers.ParseHandler
+import App.commandline.parsers.handlers.ParseHandler
 
 import scala.annotation.tailrec
 

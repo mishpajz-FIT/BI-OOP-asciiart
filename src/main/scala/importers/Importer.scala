@@ -1,5 +1,7 @@
 package importers
 
-trait Importer[T] {
-  def retrieve(): T
+import scala.util.Try
+
+trait Importer[+T] {
+  def retrieve(): Try[T]
 }
