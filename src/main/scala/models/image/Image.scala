@@ -4,7 +4,7 @@ import models.pixel.Pixel
 
 import scala.util.Try
 
-class Image[+T <: Pixel](
+class Image[+T <: Pixel] private (
   val width: Int,
   val height: Int,
   private val pixels: IndexedSeq[IndexedSeq[T]]) {

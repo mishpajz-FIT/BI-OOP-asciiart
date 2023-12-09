@@ -1,6 +1,8 @@
 package App.commandline
 
+import App.ASCIIArtProcessor
 import App.commandline.parsers.Parser
+import App.commandline.parsers.handlers.ParseHandler
 import exporters.images.ImageExporter
 import filters.image.ImageFilter
 import importers.image.ImageImporter
@@ -12,13 +14,13 @@ import org.mockito.MockitoSugar.{mock, reset, verify, when}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import org.scalatest.{BeforeAndAfterEach, FlatSpec, Matchers}
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{Success, Try}
 
-class ASCIIArtCommandLineAppSpecs
+class ASCIIArtCommandLineSpecs
     extends FlatSpec
     with Matchers
     with BeforeAndAfterEach {
-  behavior of "ASCIIArtCommandLineApp"
+  behavior of "ASCIIArtCommandLine"
 
   private val mockImporterParser = mock[Parser[Try[ImageImporter[RGBAPixel]]]]
   private val mockFilterParser = mock[Parser[Try[ImageFilter[GrayscalePixel]]]]
@@ -28,6 +30,8 @@ class ASCIIArtCommandLineAppSpecs
   private val mockImporter = mock[ImageImporter[RGBAPixel]]
   private val mockFilter = mock[ImageFilter[GrayscalePixel]]
   private val mockExporter = mock[ImageExporter[ASCIIPixel]]
+
+  private val mockApp = mock[ASCIIArtProcessor]
 
   private val testTable = new LinearASCIITable("ab")
   private val testImage = Image(
@@ -43,7 +47,8 @@ class ASCIIArtCommandLineAppSpecs
       mockTableParser,
       mockImporter,
       mockFilter,
-      mockExporter)
+      mockExporter,
+      mockApp)
 
     super.beforeEach()
   }
@@ -62,22 +67,29 @@ class ASCIIArtCommandLineAppSpecs
     when(mockFilter.transform(any[Image[GrayscalePixel]]))
       .thenReturn(testGrayscaleImage)
     when(mockExporter.export(any[Image[ASCIIPixel]])).thenReturn(Success())
+
+    when(mockApp.run()).thenReturn(Success())
   }
+
+  private val appProvider = (
+    _: ImageImporter[RGBAPixel],
+    _: ImageFilter[GrayscalePixel],
+    _: ImageExporter[ASCIIPixel],
+    _: ASCIITable) => mockApp
 
   it should "process all valid arguments a go through flow correctly" in {
     setupCommonMocks()
 
-    val app = new ASCIIArtCommandLineApp(
+    val app = new ASCIIArtCommandLine(
       mockImporterParser,
       mockFilterParser,
       mockExporterParser,
-      mockTableParser)
+      mockTableParser,
+      appProvider)
     val result = app.run(Array("valid args"))
 
     result.isSuccess shouldBe true
-    verify(mockImporter).retrieve()
-    verify(mockFilter).transform(any[Image[GrayscalePixel]])
-    verify(mockExporter).export(any[Image[ASCIIPixel]])
+    verify(mockApp).run()
   }
 
   it should "fail on missing importer" in {
@@ -87,11 +99,12 @@ class ASCIIArtCommandLineAppSpecs
     when(mockImporterParser.parse(any[Seq[String]]))
       .thenReturn(Seq.empty[Try[ImageImporter[RGBAPixel]]])
 
-    val app = new ASCIIArtCommandLineApp(
+    val app = new ASCIIArtCommandLine(
       mockImporterParser,
       mockFilterParser,
       mockExporterParser,
-      mockTableParser)
+      mockTableParser,
+      appProvider)
     val result = app.run(Array("missing importer"))
 
     result.isFailure shouldBe true
@@ -106,11 +119,12 @@ class ASCIIArtCommandLineAppSpecs
     when(mockImporterParser.parse(any[Seq[String]]))
       .thenReturn(Seq(Try(mockImporter), Try(mockImporter)))
 
-    val app = new ASCIIArtCommandLineApp(
+    val app = new ASCIIArtCommandLine(
       mockImporterParser,
       mockFilterParser,
       mockExporterParser,
-      mockTableParser)
+      mockTableParser,
+      appProvider)
     val result = app.run(Array("more importers"))
 
     result.isFailure shouldBe true
@@ -125,11 +139,12 @@ class ASCIIArtCommandLineAppSpecs
     when(mockExporterParser.parse(any[Seq[String]]))
       .thenReturn(Seq.empty[Try[ImageExporter[ASCIIPixel]]])
 
-    val app = new ASCIIArtCommandLineApp(
+    val app = new ASCIIArtCommandLine(
       mockImporterParser,
       mockFilterParser,
       mockExporterParser,
-      mockTableParser)
+      mockTableParser,
+      appProvider)
     val result = app.run(Array("missing exporter"))
 
     result.isFailure shouldBe true
@@ -144,52 +159,17 @@ class ASCIIArtCommandLineAppSpecs
     when(mockTableParser.parse(any[Seq[String]]))
       .thenReturn(Seq(Try(testTable), Try(testTable)))
 
-    val app = new ASCIIArtCommandLineApp(
+    val app = new ASCIIArtCommandLine(
       mockImporterParser,
       mockFilterParser,
       mockExporterParser,
-      mockTableParser)
+      mockTableParser,
+      appProvider)
     val result = app.run(Array("more tables"))
 
     result.isFailure shouldBe true
     result.failure.exception.getMessage should include(
       "Only single table is allowed")
-  }
-
-  it should "fail on importer failure" in {
-    setupCommonMocks()
-
-    reset(mockImporter)
-    when(mockImporter.retrieve())
-      .thenReturn(Failure(new IllegalArgumentException("mock exception")))
-
-    val app = new ASCIIArtCommandLineApp(
-      mockImporterParser,
-      mockFilterParser,
-      mockExporterParser,
-      mockTableParser)
-    val result = app.run(Array("retrieval fail"))
-
-    result.isFailure shouldBe true
-    result.failure.exception.getMessage should include("mock exception")
-  }
-
-  it should "fail on exporter failure" in {
-    setupCommonMocks()
-
-    reset(mockExporter)
-    when(mockExporter.export(any[Image[ASCIIPixel]]))
-      .thenReturn(Failure(new IllegalArgumentException("mock exception")))
-
-    val app = new ASCIIArtCommandLineApp(
-      mockImporterParser,
-      mockFilterParser,
-      mockExporterParser,
-      mockTableParser)
-    val result = app.run(Array("export fail"))
-
-    result.isFailure shouldBe true
-    result.failure.exception.getMessage should include("mock exception")
   }
 
   it should "use default table when no table was supplied" in {
@@ -199,16 +179,65 @@ class ASCIIArtCommandLineAppSpecs
     when(mockTableParser.parse(any[Seq[String]]))
       .thenReturn(Seq.empty[Try[ASCIITable]])
 
-    val app = new ASCIIArtCommandLineApp(
+    val app = new ASCIIArtCommandLine(
       mockImporterParser,
       mockFilterParser,
       mockExporterParser,
-      mockTableParser)
+      mockTableParser,
+      appProvider)
     val result = app.run(Array("valid args"))
 
     result.isSuccess shouldBe true
-    verify(mockImporter).retrieve()
-    verify(mockFilter).transform(any[Image[GrayscalePixel]])
-    verify(mockExporter).export(any[Image[ASCIIPixel]])
+    verify(mockApp).run()
+  }
+
+  behavior of "ASCIIArtCommandLine.Builder"
+
+  it should "correctly build ASCIIArtCommandLine with provided handlers" in {
+    val mockImporterHandler = mock[ParseHandler[Try[ImageImporter[RGBAPixel]]]]
+    val mockFilterHandler = mock[ParseHandler[Try[ImageFilter[GrayscalePixel]]]]
+    val mockExporterHandler = mock[ParseHandler[Try[ImageExporter[ASCIIPixel]]]]
+    val mockTableHandler = mock[ParseHandler[Try[ASCIITable]]]
+
+    val builder = ASCIIArtCommandLine
+      .Builder(appProvider)
+      .withImporterHandler(mockImporterHandler)
+      .withFilterHandler(mockFilterHandler)
+      .withExporterHandler(mockExporterHandler)
+      .withTableHandler(mockTableHandler)
+
+    val app = builder.build()
+
+    app shouldBe a[ASCIIArtCommandLine]
+  }
+
+  it should "correctly handle building without any handlers supplied" in {
+    val builder = ASCIIArtCommandLine.Builder(appProvider)
+
+    val app = builder.build()
+
+    app shouldBe a[ASCIIArtCommandLine]
+  }
+
+  it should "correctly handle multiple handlers of same type" in {
+    val mockImporterHandler = mock[ParseHandler[Try[ImageImporter[RGBAPixel]]]]
+    val mockFilterHandler = mock[ParseHandler[Try[ImageFilter[GrayscalePixel]]]]
+    val mockExporterHandler = mock[ParseHandler[Try[ImageExporter[ASCIIPixel]]]]
+    val mockTableHandler = mock[ParseHandler[Try[ASCIITable]]]
+
+    val builder = ASCIIArtCommandLine
+      .Builder(appProvider)
+      .withImporterHandler(mockImporterHandler)
+      .withFilterHandler(mockFilterHandler)
+      .withExporterHandler(mockExporterHandler)
+      .withTableHandler(mockTableHandler)
+      .withImporterHandler(mockImporterHandler)
+      .withFilterHandler(mockFilterHandler)
+      .withExporterHandler(mockExporterHandler)
+      .withTableHandler(mockTableHandler)
+
+    val app = builder.build()
+
+    app shouldBe a[ASCIIArtCommandLine]
   }
 }
