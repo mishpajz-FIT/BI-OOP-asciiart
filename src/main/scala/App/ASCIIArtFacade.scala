@@ -10,11 +10,12 @@ import transformers.Transformer
 import scala.util.Try
 
 class ASCIIArtFacade(
-  importer: ImageImporter[Pixel],
-  filter: ImageFilter[GrayscalePixel],
-  exporter: ImageExporter[ASCIIPixel],
-  grayscaler: Transformer[Image[Pixel], Image[GrayscalePixel]],
-  asciier: Transformer[Image[GrayscalePixel], Image[ASCIIPixel]]) {
+  val importer: ImageImporter[Pixel],
+  val filter: ImageFilter[GrayscalePixel],
+  val exporter: ImageExporter[ASCIIPixel],
+  val grayscaler: Transformer[Image[Pixel], Image[GrayscalePixel]],
+  val asciier: Transformer[Image[GrayscalePixel], Image[ASCIIPixel]])
+    extends ASCIIArtProcessor {
   def run(): Try[Unit] =
     for {
       image <- importer.retrieve()

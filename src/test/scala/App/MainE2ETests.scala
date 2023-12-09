@@ -181,8 +181,17 @@ class MainE2ETests extends FlatSpec with Matchers {
     runTestShouldHaveStatus(args, "At least one exporter")
   }
 
-  it should "fail with wrong input parameter" in {
+  it should "fail with nonexisting input parameter" in {
     val args = Array("--image", "nonexistingimage", "--output-console")
+
+    runTestShouldHaveStatus(args, "is not usable file or doesn't exist")
+  }
+
+  it should "fail with wrong input parameter" in {
+    val testImageUri =
+      getClass.getClassLoader.getResource("test/directory1").toURI
+
+    val args = Array("--image", testImageUri.toString, "--output-console")
 
     runTestShouldHaveStatus(args, "is not usable file or doesn't exist")
   }
