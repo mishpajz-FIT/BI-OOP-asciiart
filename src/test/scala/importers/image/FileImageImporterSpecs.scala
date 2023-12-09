@@ -173,4 +173,20 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
 
     image.isFailure shouldBe true
   }
+
+  it should "fail with IllegalArgumentException when importer creation fails" in {
+    val emptyImage = File.createTempFile("test", ".err")
+    emptyImage.deleteOnExit()
+
+    mockRegistry.register(
+      "err",
+      (_: File) => throw new IllegalArgumentException("fail"))
+
+    val importer =
+      FileImageImporter(emptyImage.toString, mockRegistry)
+
+    importer.isFailure shouldBe true
+    importer.failure.exception.getMessage should include(
+      "could not be processed due to error")
+  }
 }
