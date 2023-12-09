@@ -193,7 +193,7 @@ class MainE2ETests extends FlatSpec with Matchers {
 
     val args = Array("--image", testImageUri.toString, "--output-console")
 
-    runTestShouldHaveStatus(args, "is not usable file or does't exist")
+    runTestShouldHaveStatus(args, "is not usable file or doesn't exist")
   }
 
   it should "fail with wrong filter parameter" in {
