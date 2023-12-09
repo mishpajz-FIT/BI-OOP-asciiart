@@ -6,6 +6,11 @@ import registries.Registry
 
 import java.io.File
 
+/**
+  * Registry for [[FileImageImporter]].
+  * 
+  * Importers are registered by their file extension.
+  */
 object FileImageImporterRegistry
     extends Registry[String, File => FileImageImporter] {
   register("png", (file: File) => new PNGFileImageImporter(file))

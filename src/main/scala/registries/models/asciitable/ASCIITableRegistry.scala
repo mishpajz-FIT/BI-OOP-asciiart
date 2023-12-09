@@ -5,8 +5,16 @@ import registries.Registry
 
 import scala.collection.immutable.SortedMap
 
+/**
+  * Registry for [[ASCIITable]].
+  */
 object ASCIITableRegistry extends Registry[String, ASCIITable] {
 
+  /**
+    * Get the default [[ASCIITable]].
+    *
+    * @return default table
+    */
   def getDefault(): ASCIITable =
     new LinearASCIITable(
       """$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'. """)
