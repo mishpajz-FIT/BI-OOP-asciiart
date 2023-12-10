@@ -9,6 +9,14 @@ import java.awt.image.BufferedImage
 import javax.imageio.stream.ImageInputStream
 import scala.util.Try
 
+/**
+  * [[BufferedImageImporter]] for [[ImageInputStream]].
+  * 
+  * Creates [[Image]] from [[ImageInputStream]].
+  * Uses [[ImageIOReadWrapper]] to read from [[ImageInputStream]].
+  * 
+  * @param inputStream [[ImageInputStream]] to import image from
+  */
 class InputStreamImageImporter(inputStream: ImageInputStream)
     extends BufferedImageImporter
     with ImageIOReadWrapper {

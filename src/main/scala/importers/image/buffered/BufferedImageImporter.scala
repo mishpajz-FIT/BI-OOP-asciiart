@@ -8,8 +8,17 @@ import utilities.ArrayUtilities
 import java.awt.image.BufferedImage
 import scala.util.Try
 
+/**
+  * [[ImageImporter]] that imports from a [[BufferedImage]].
+  */
 trait BufferedImageImporter extends ImageImporter[RGBAPixel] {
 
+  /**
+    * Create [[Image]] from [[BufferedImage]].
+    *
+    * @param bufferedImage buffered source image
+    * @return [[Success]] with the imported [[Image]] or [[Failure]]
+    */
   protected def createFrom(
     bufferedImage: BufferedImage): Try[Image[RGBAPixel]] =
     Try {
