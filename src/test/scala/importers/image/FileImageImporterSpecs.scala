@@ -78,6 +78,25 @@ class FileImageImporterSpecs extends FlatSpec with Matchers {
     image.getPixel(1, 3) shouldEqual RGBAPixel(0, 0, 0, 255)
   }
 
+  it should "return Image[RGBAPixel] when provided with PNG image in uppercase with registered PNGFileImageImporter importer" in {
+    val testImageUri =
+      getClass.getClassLoader.getResource("test/small-img1.PNG").toURI
+    val testImagePath = Paths.get(testImageUri).toAbsolutePath.toString
+
+    val importer =
+      FileImageImporter(testImagePath, mockRegistry)
+        .getOrElse(fail("Image importer was not created"))
+
+    val image = importer.retrieve() match {
+      case Success(value: Image[RGBAPixel]) => value
+      case Success(_)                       => fail("Image has incorrect pixel format")
+      case _                                => fail("Image was not imported")
+    }
+
+    image.height shouldBe 4
+    image.width shouldBe 2
+  }
+
   it should "return Image[RGBAPixel] when provided with transparent PNG image with registered PNGFileImageImporter importer" in {
     val testImageUri =
       getClass.getClassLoader.getResource("test/small-img2.png").toURI
