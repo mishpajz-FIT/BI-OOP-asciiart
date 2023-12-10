@@ -7,7 +7,7 @@ The idea of this project is to load images, translate them into ASCII ART images
 
 ## Usage
 
-Run the application using `sbt run`.
+Run the application using `sbt "run <args>"`. Run tests using `sbt test`.
 
 ### Importing images
 
