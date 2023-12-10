@@ -9,9 +9,10 @@ The idea of this project is to load images, translate them into ASCII ART images
 
 Run the application using `sbt "run <args>"`. Run tests using `sbt test`.
 
+The order of arguments does not matter, with the exception of filters. Initially, the image is imported, followed by the sequential application of filters as specified, and finally, it is exported.
 ### Importing images
 
-- __`--image <path>`__ to import a image from a file. Currently _PNG_ and _JPEG_ formats are supported.
+- __`--image <path>`__ to import a image from a file. Currently, _PNG_ and _JPEG_ file formats are supported.
 - __`--image-random`__ to create a random image (random lines in different directions), the size of the image will be between [100; 300] in both width and height.
 
 ### ASCII conversion table
