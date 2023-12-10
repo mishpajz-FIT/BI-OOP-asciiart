@@ -8,6 +8,11 @@ import utilities.Axes.{Axis, X, Y}
 
 import scala.reflect.ClassTag
 
+/**
+  * Flips an [[Image]] horizontally or vertically.
+  *
+  * @param axis axis to flip the image by
+  */
 final case class FlipImageFilter[T <: Pixel: ClassTag](axis: Axis)
     extends ImageFilter[T] {
 
