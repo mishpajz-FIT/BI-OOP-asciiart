@@ -1,6 +1,14 @@
 package models.pixel
 import models.pixel.visitor.PixelVisitor
 
+/**
+  * ASCII pixel.
+  * 
+  * A [[GrayscalePixel]] that includes mapping to a character.
+  *
+  * @param intensity intensity
+  * @param character mapped character
+  */
 final case class ASCIIPixel(override val intensity: Int, character: Char)
     extends GrayscalePixel(intensity) {
 
