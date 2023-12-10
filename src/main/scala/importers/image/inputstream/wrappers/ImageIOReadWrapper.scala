@@ -5,16 +5,16 @@ import javax.imageio.ImageIO
 import javax.imageio.stream.ImageInputStream
 
 /**
-  * Wrapper for [[ImageIO]] read method.
-  */
+ * Wrapper for [[ImageIO]] read method.
+ */
 trait ImageIOReadWrapper {
 
   /**
-    * Reads [[BufferedImage]] from [[ImageInputStream]].
-    * 
-    * @param inputStream [[ImageInputStream]] to read from
-    * @return [[BufferedImage]]
-    */
+   * Reads [[BufferedImage]] from [[ImageInputStream]].
+   *
+   * @param inputStream [[ImageInputStream]] to read from
+   * @return [[BufferedImage]]
+   */
   def ioRead(inputStream: ImageInputStream): BufferedImage =
     ImageIO.read(inputStream)
 }

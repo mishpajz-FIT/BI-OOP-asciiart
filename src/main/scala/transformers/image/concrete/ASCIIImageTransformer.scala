@@ -6,10 +6,10 @@ import models.pixel.{ASCIIPixel, GrayscalePixel}
 import transformers.image.ImageTransformer
 
 /**
-  * [[ImageTransformer]] that transforms an [[Image]] of [[GrayscalePixel]] to [[ASCIIPixel]].
-  *
-  * @param table
-  */
+ * [[ImageTransformer]] that transforms an [[Image]] of [[GrayscalePixel]] to [[ASCIIPixel]].
+ *
+ * @param table [[ASCIITable]] conversion table
+ */
 final case class ASCIIImageTransformer(private val table: ASCIITable)
     extends ImageTransformer[GrayscalePixel, ASCIIPixel] {
   override def transform(item: Image[GrayscalePixel]): Image[ASCIIPixel] =

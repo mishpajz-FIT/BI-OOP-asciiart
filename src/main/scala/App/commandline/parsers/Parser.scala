@@ -5,11 +5,11 @@ import App.commandline.parsers.handlers.ParseHandler
 import scala.annotation.tailrec
 
 /**
-  * Parser.
-  * 
-  * @tparam R type of the parsed item
-  * @param handlers sequence of handlers that parse arguments into items
-  */
+ * Parser.
+ *
+ * @tparam R type of the parsed item
+ * @param handlers sequence of handlers that parse arguments into items
+ */
 class Parser[R](private val handlers: Seq[ParseHandler[R]]) {
 
   private val preparedHandlers = handlers.to(LazyList)
@@ -34,11 +34,11 @@ class Parser[R](private val handlers: Seq[ParseHandler[R]]) {
   }
 
   /**
-    * Parse arguments into elements.
-    * 
-    * @param arguments arguments to parse
-    * @return parsed elements
-    */
+   * Parse arguments into elements.
+   *
+   * @param arguments arguments to parse
+   * @return parsed elements
+   */
   def parse(arguments: Seq[String]): Seq[R] =
     parseRecursively(arguments, Seq.empty[R])
 }

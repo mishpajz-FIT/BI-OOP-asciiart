@@ -9,15 +9,15 @@ import java.awt.{BasicStroke, Color}
 import scala.util.{Random, Try}
 
 /**
-  * Random image importer.
-  * 
-  * Creates random [[Image]].
-  * 
-  * @param width width of the random image
-  * @param height height of the random image
-  * @param strokes number of "strokes" to draw
-  * @param random [[Random]] instance to use for generating random numbers
-  */
+ * Random image importer.
+ *
+ * Creates random [[Image]].
+ *
+ * @param width width of the random image
+ * @param height height of the random image
+ * @param strokes number of "strokes" to draw
+ * @param random [[Random]] instance to use for generating random numbers
+ */
 class RandomImageImporter(
   val width: Int,
   val height: Int,
@@ -59,16 +59,16 @@ class RandomImageImporter(
 object RandomImageImporter {
 
   /**
-    * Create [[RandomImageImporter]].
-    * 
-    * Width and height of the image are randomised between 100 and the provided values.
-    *
-    * @param maxWidth max width of the random image
-    * @param maxHeight max height of the random image
-    * @param strokes number of "strokes" to draw
-    * @param random [[Random]] instance to use for generating random numbers
-    * @return
-    */
+   * Create [[RandomImageImporter]].
+   *
+   * Width and height of the image are randomised between 100 and the provided values.
+   *
+   * @param maxWidth max width of the random image
+   * @param maxHeight max height of the random image
+   * @param strokes number of "strokes" to draw
+   * @param random [[Random]] instance to use for generating random numbers
+   * @return
+   */
   def apply(
     maxWidth: Int = 3000,
     maxHeight: Int = 3000,

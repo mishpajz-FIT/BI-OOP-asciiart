@@ -9,35 +9,36 @@ import java.nio.charset.StandardCharsets
 import scala.util.{Failure, Try}
 
 /**
-  * [[ImageExporter]] that writes characters of [[ASCIIPixel]] [[Image]] to a stream.
-  *
-  * @param writer writer to write to
-  */
+ * [[ImageExporter]] that writes characters of [[ASCIIPixel]] [[Image]] to a stream.
+ *
+ * @param writer writer to write to
+ */
 class StreamASCIIImageExporter(writer: OutputStreamWriter)
     extends ImageExporter[ASCIIPixel]
     with Closeable {
 
   private var closed = false
-  
+
   /**
-    * Creates a [[StreamASCIIImageExporter]] with an [[OutputStream]].
-    *
-    * @param outputStream
-    */
+   * Creates a [[StreamASCIIImageExporter]] with an [[OutputStream]].
+   *
+   * @param outputStream stream to write to
+   */
   def this(outputStream: OutputStream) =
     this(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8))
 
   /**
-    * Write characters of [[ASCIIPixel]] [[Image]] to a stream.
-    *
-    * @param image image to write
-    * @return Success if write was successful otherwise Failirue
-    */
+   * Write characters of [[ASCIIPixel]] [[Image]] to a stream.
+   *
+   * @param image image to write
+   * @return Success if write was successful otherwise Failure
+   */
   protected def writeToStream(image: Image[ASCIIPixel]): Try[Unit] =
     Try {
       if (closed)
-        return Failure(new IllegalStateException(
-          "Attempted to write to already closed stream."))
+        return Failure(
+          new IllegalStateException(
+            "Attempted to write to already closed stream."))
 
       val height = image.height
       val width = image.width
@@ -51,9 +52,9 @@ class StreamASCIIImageExporter(writer: OutputStreamWriter)
       writer.flush()
     }
 
-    /**
-      * Attempt to close the writer (if it was not closed yet).
-      */
+  /**
+   * Attempt to close the writer (if it was not closed yet).
+   */
   override def close(): Unit = {
     if (closed)
       return

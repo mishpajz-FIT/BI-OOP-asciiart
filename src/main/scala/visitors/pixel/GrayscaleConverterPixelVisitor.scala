@@ -4,9 +4,9 @@ import models.pixel.visitor.PixelVisitor
 import models.pixel.{ASCIIPixel, GrayscalePixel, RGBAPixel}
 
 /**
-  * A [[PixelVisitor]] that converts [[Pixel]] to [[GrayscalePixel]].
-  * 
-  */
+ * A [[PixelVisitor]] that converts [[Pixel]] to [[GrayscalePixel]].
+ *
+ */
 class GrayscaleConverterPixelVisitor extends PixelVisitor[GrayscalePixel] {
   override def visit(pixel: RGBAPixel): GrayscalePixel = {
     val opacity = pixel.a / 255.0

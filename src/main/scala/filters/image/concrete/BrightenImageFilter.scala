@@ -6,10 +6,10 @@ import models.pixel.GrayscalePixel
 import utilities.MathUtilities
 
 /**
-  * Filter that changes intensity of all [[GrayscalePixel]] by a constant.
-  *
-  * @param increase intensity to increase (or decrease if negative) by
-  */
+ * Filter that changes intensity of all [[GrayscalePixel]] by a constant.
+ *
+ * @param increase intensity to increase (or decrease if negative) by
+ */
 final case class BrightenImageFilter(increase: Int)
     extends ImageFilter[GrayscalePixel]() {
   override def transform(item: Image[GrayscalePixel]): Image[GrayscalePixel] =

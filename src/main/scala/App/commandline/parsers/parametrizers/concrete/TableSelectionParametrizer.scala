@@ -8,11 +8,11 @@ import registries.models.asciitable.ASCIITableRegistry
 import scala.util.{Failure, Try}
 
 /**
-  * [[Parametrizer]] for [[ASCIITable]].
-  *
-  * Attempts to convert a [[String]] to a name of [[Table]] and retrieve the [[ASCIITable]] from a [[Repository]].
-  *
-  */
+ * [[Parametrizer]] for [[ASCIITable]].
+ *
+ * Attempts to convert a [[String]] to a name of [[ASCIITable]] and retrieve the [[ASCIITable]] from a [[Registry]].
+ *
+ */
 final case class TableSelectionParametrizer(
   registry: Registry[String, ASCIITable] = ASCIITableRegistry)
     extends Parametrizer[Try[ASCIITable]] {
