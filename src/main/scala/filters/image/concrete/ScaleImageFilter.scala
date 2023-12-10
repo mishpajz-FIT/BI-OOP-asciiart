@@ -9,6 +9,13 @@ import utilities.ArrayUtilities
 import scala.reflect.ClassTag
 import scala.util.Random
 
+/**
+ * Filter that scales [[Image]] by a factor in both dimensions.
+ *
+ * Pixels in the new image are reduced or duplicated.
+ *
+ * @param scale factor to scale by
+ */
 final case class ScaleImageFilter[T <: Pixel: ClassTag](scale: Scale)
     extends ImageFilter[T] {
   override def transform(item: Image[T]): Image[T] =
@@ -58,6 +65,9 @@ final case class ScaleImageFilter[T <: Pixel: ClassTag](scale: Scale)
   }
 }
 
+/**
+ * Scales for [[ScaleImageFilter]].
+ */
 object Scales extends Enumeration {
   type Scale = Value
 
