@@ -37,3 +37,11 @@ Image can be exported multiple times.
 - __`--scale <scale>`__ to scale the image by a given scale. This will change the amout of pixels in a image. The scale can be _0.25_, _1_ (identity) and _4_. (e.g. `--scale 0.25` will scale the image to 1/4 of its original size, meaning both dimensions of the image will be halved.)
 
 The filters will be applied in the order they are passed to the application. Multiple filters of the same type can be applied.
+
+## Example
+Before:<br>
+<img src="docs/resources/snowflake.png" alt="snowflake" width="400"/><br>
+After:<br>
+<img src="docs/resources/asciisnowflake.png" alt="asciisnowflake" width="400"/>
+
+<sub><sup><a href="https://www.vecteezy.com/free-png/snowflake">Snowflake PNGs by Vecteezy</a></sub></sup>
