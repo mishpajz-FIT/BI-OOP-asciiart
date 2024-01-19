@@ -1,6 +1,7 @@
 # ASCII Art
 
-[![pipeline status](https://github.com/mishpajz-FIT/BI-OOP-asciiart/workflows/tests/badge.svg)](https://github.com/mishpajz-FIT/BI-OOP-asciiart/actions)
+[![pipeline status](https://github.com/mishpajz-FIT/BI-OOP-asciiart/actions/workflows/tests.yml/badge.svg)](https://github.com/mishpajz-FIT/BI-OOP-asciiart/actions/workflows/tests.yml)
+![Code Coverage](https://img.shields.io/badge/Code%20Coverage-99%25-success?style=flat)
 
 The idea of this project is to load images, translate them into ASCII ART images, optionally apply filters, and save them. 
 
