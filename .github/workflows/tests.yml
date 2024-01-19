@@ -23,11 +23,6 @@ jobs:
         cache: 'sbt'
     - name: Run tests
       run: sbt clean coverage test coverageReport
-    - name: Upload coverage report
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: target/scala-2.13/coverage-report
     - name: Code Coverage Report
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
