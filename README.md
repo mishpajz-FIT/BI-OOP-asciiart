@@ -1,9 +1,12 @@
 # ASCII Art
 
-[![pipeline status](https://gitlab.fit.cvut.cz/dobesmic/bi-oop-ascii-art/badges/master/pipeline.svg)](https://gitlab.fit.cvut.cz/dobesmic/bi-oop-ascii-art/)
-[![code coverage](https://gitlab.fit.cvut.cz/dobesmic/bi-oop-ascii-art/badges/master/coverage.svg)](https://gitlab.fit.cvut.cz/dobesmic/bi-oop-ascii-art/)
+[![pipeline status](https://github.com/mishpajz-FIT/BI-OOP-asciiart/workflows/tests/badge.svg)](https://github.com/mishpajz-FIT/BI-OOP-asciiart/actions)
 
-The idea of this project is to load images, translate them into ASCII ART images, optionally apply filters, and save them. (https://courses.fit.cvut.cz/BI-OOP/projects/ASCII-art.html)
+The idea of this project is to load images, translate them into ASCII ART images, optionally apply filters, and save them. 
+
+This project is highly focused on adhering to OOP principles (and good software development practices in general), prioritizing extendability and maintainability. It is written in Scala and uses sbt as a build tool.
+
+This project was started was created as a part of my 'Object-oriented programming' course at FIT CTU.
 
 ## Usage
 
